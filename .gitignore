@@ -1,0 +1,7 @@
+.cache
+.idea
+solutions
+__pycache__
+venv
+results.xml
+testing.py
