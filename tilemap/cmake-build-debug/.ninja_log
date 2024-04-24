@@ -1,7 +1,19 @@
 # ninja log v5
-5	678	7355812803815999	CMakeFiles/tilemap.dir/Base_shape.cpp.obj	ec87260415243b10
-1	727	7355812804306787	CMakeFiles/tilemap.dir/main.cpp.obj	f5c0b2ca9410e4e3
-727	1444	7355812805480524	tilemap.exe	48ad205574a852be
-1	912	7355832478214823	build.ninja	715d3417e3d1ca45
-9	684	7355812803866456	CMakeFiles/tilemap.dir/T_block.cpp.obj	a9a5f9feec7e5a1b
-6	949	7355801329133063	CMakeFiles/tilemap.dir/Tilemap.cpp.obj	3e60bebe5d37bf5e
+25	1354	7356504177996315	CMakeFiles/tilemap.dir/pieces/O_block.cpp.obj	920625021cee7509
+1	833	7356508455759315	CMakeFiles/tilemap.dir/main.cpp.obj	7717dc6018eb7e6
+815	1614	7356515593303630	tilemap.exe	3579570a52889d84
+10	1057	7356056356930483	CMakeFiles/tilemap.dir/Piece_collection.cpp.obj	b33a8d954b8b7ad7
+2	881	7356070197176170	build.ninja	3ef04891cc348def
+2	814	7356515592004226	CMakeFiles/tilemap.dir/Block_bag.cpp.obj	d74151d24f8d7473
+5	1017	7356056356507909	CMakeFiles/tilemap.dir/Tilemap.cpp.obj	ca1d693cd02daff1
+19	1347	7356504177896349	CMakeFiles/tilemap.dir/pieces/Base_shape.cpp.obj	544cb0bf632735bf
+10	1362	7356504178086832	CMakeFiles/tilemap.dir/pieces/T_block.cpp.obj	7f82222e225f2788
+1	819	7356515851090210	CMakeFiles/tilemap.dir/Block_bag.cpp.obj	d74151d24f8d7473
+820	1629	7356515852455709	tilemap.exe	3579570a52889d84
+1	829	7356517096242834	CMakeFiles/tilemap.dir/Block_bag.cpp.obj	d74151d24f8d7473
+829	1647	7356517097530269	tilemap.exe	3579570a52889d84
+2	819	7356517685223903	CMakeFiles/tilemap.dir/Block_bag.cpp.obj	d74151d24f8d7473
+820	1616	7356517686485440	tilemap.exe	3579570a52889d84
+2	799	7356521528028327	CMakeFiles/tilemap.dir/main.cpp.obj	7717dc6018eb7e6
+7	829	7356521528330032	CMakeFiles/tilemap.dir/Block_bag.cpp.obj	d74151d24f8d7473
+830	1678	7356521530039365	tilemap.exe	3579570a52889d84

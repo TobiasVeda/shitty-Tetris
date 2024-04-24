@@ -7,10 +7,17 @@ find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
 add_executable(tilemap main.cpp
         Tilemap.cpp
         Tilemap.h
-        Base_shape.cpp
-        Base_shape.h
+        pieces/Base_shape.cpp
+        pieces/Base_shape.h
         Constants.h
-        T_block.cpp
-        T_block.h)
+        pieces/T_block.cpp
+        pieces/T_block.h
+        Piece_collection.cpp
+        Piece_collection.h
+        pieces/O_block.cpp
+        pieces/O_block.h
+        Block_bag.cpp
+        Block_bag.h
+)
 
 target_link_libraries(tilemap PRIVATE sfml-system sfml-network sfml-graphics sfml-window)
