@@ -25,7 +25,7 @@ Base_shape Block_bag::get_new_block() {
     if (_bag[i] == "T"){
         _bag.erase(_bag.begin() + i);
         static T_block new_player_controlled_block;
-        // Block contains a list with pointers. static prevent losing it in scope
+        // cant create new with static
         return new_player_controlled_block;
     }
     if (_bag[i] == "O"){

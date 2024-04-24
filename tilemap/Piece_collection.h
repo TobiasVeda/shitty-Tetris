@@ -11,6 +11,9 @@
 class Piece_collection {
 private:
     std::list<std::list<sf::RectangleShape*>*> _piece_collection;
+
+public:
+    void add_to_collection(std::list<sf::RectangleShape*>);
 };
 
 

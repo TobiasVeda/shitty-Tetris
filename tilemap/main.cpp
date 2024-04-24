@@ -22,8 +22,8 @@ int main()
     view.setViewport(sf::FloatRect(0, 0, 0.21, 0.67));
     window.setView(view);
 
-    Base_shape a = Block_bag::get_new_block();
-
+//    Base_shape a = Block_bag::get_new_block();
+O_block a;
 
     Tilemap map;
     if (!map.load())
@@ -31,26 +31,30 @@ int main()
 
 
 
+//    std::thread thread1 (&Base_shape::gravity, &a, &view);
+    std::thread thread2 (&Base_shape::move, &a, &view);
 
     while (window.isOpen()){
+
+        if (a.is_placed()){
+//            a = Block_bag::get_new_block();
+        }
+
+
         sf::Event event{};
         while (window.pollEvent(event)){
             if(event.type == sf::Event::Closed)
                 window.close();
         }
-        a.move(&view);
+
 
         window.clear(sf::Color::White);
 
-
         window.draw(map);
-
-
         window.draw(a);
 
         window.display();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     return 0;
 }

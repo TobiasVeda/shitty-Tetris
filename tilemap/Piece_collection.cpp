@@ -3,3 +3,8 @@
 //
 
 #include "Piece_collection.h"
+
+void Piece_collection::add_to_collection(std::list<sf::RectangleShape *> ) {
+
+
+}

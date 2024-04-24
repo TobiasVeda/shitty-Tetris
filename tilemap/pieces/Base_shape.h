@@ -30,7 +30,7 @@ public:
     void rotate_block();
     void gravity(sf::View*);
     void move(sf::View*);
-//    void place_block();
+    [[nodiscard]] bool is_placed() const;
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
 };
 
