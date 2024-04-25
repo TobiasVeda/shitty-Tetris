@@ -11,7 +11,7 @@
 #include <string>
 #include <iostream>
 
-Base_shape Block_bag::get_new_block() {
+void Block_bag::get_new_block(Base_shape *block) {
 
     if (_bag.empty()) {
         _bag.emplace_back("T");
@@ -24,16 +24,11 @@ Base_shape Block_bag::get_new_block() {
 
     if (_bag[i] == "T"){
         _bag.erase(_bag.begin() + i);
-        static T_block new_player_controlled_block;
-        // cant create new with static
-        return new_player_controlled_block;
-    }
-    if (_bag[i] == "O"){
+        T_block new_player_controlled_block;
+        *block = new_player_controlled_block;
+    } else if (_bag[i] == "O"){
         _bag.erase(_bag.begin() + i);
-        static O_block new_player_controlled_block;
-        return new_player_controlled_block;
+        O_block new_player_controlled_block;
+        *block = new_player_controlled_block;
     }
-
-    static O_block oops_something_went_wrong_here_is_an_O_block;
-    return oops_something_went_wrong_here_is_an_O_block;
 }

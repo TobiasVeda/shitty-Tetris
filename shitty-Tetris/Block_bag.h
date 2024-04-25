@@ -16,7 +16,7 @@ protected:
         // Linking error if not inline
 
 public:
-    static Base_shape get_new_block(); // need parameter to main object
+    static void get_new_block(Base_shape*); // need parameter to main object
 };
 
 

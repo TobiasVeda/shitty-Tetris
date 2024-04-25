@@ -3,9 +3,11 @@
 //
 #include <SFML/Graphics.hpp>
 #include "Base_shape.h"
+//#include "../Block_stack.h"
 
-
-
+std::list<sf::RectangleShape>* Base_shape::get_block_list() {
+    return &_tetris_piece;
+}
 
     void Base_shape::rotate_block(){
 //        auto cleared = sf::Vector2f(-1, -1);
@@ -36,23 +38,24 @@
 //order of set position and origin can give issues maybe
     }
 
-    bool Base_shape::is_clear_to_move_down(sf::View *view) {
-        auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
-        bool next_pos_valid_down = false;
+bool Base_shape::is_clear_to_move_down(sf::View *view) {
+    auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
+    bool next_pos_valid_down = false;
+    // To be considered out of bounds and therefore prevent gravity,
+    // a rectangle must not be cleared and its next move must set its position outside the view
+    // More likely to hit block stack before bottom
 
-        // To be considered out of bounds and therefore prevent gravity,
-        // a rectangle must not be cleared and its next move must set its position outside the view
-        for (const auto& i : _tetris_piece) {
-            bool is_oob_down = i->getPosition().y + (tilesize_f.y * 2) > view->getSize().y;
+    for (const auto& i : _tetris_piece) {
+        bool is_oob_down = i.getPosition().y + (tilesize_f.y * 2) > view->getSize().y;
 
-            if (!is_oob_down){
-                next_pos_valid_down = true;
-            }else{
-                next_pos_valid_down = false;
-                // default should be false
-            }
+        if (!is_oob_down){
+            next_pos_valid_down = true;
+        }else{
+            next_pos_valid_down = false;
+            return next_pos_valid_down;
         }
-        return next_pos_valid_down;
+    }
+    return next_pos_valid_down;
 }
 bool Base_shape::is_clear_to_move_right(sf::View *view) {
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
@@ -61,13 +64,13 @@ bool Base_shape::is_clear_to_move_right(sf::View *view) {
     // To be considered out of bounds and therefore prevent gravity,
     // a rectangle must not be cleared and its next move must set its position outside the view
     for (const auto& i : _tetris_piece) {
-        bool is_oob_right = i->getPosition().x + (tilesize_f.x * 2) > view->getSize().x;
+        bool is_oob_right = i.getPosition().x + (tilesize_f.x * 2) > view->getSize().x;
 
         if (!is_oob_right){
             next_pos_valid_right = true;
         }else{
             next_pos_valid_right = false;
-            // default should be false
+            return next_pos_valid_right;
         }
     }
     return next_pos_valid_right;
@@ -79,62 +82,66 @@ bool Base_shape::is_clear_to_move_left(sf::View *view) {
     // To be considered out of bounds and therefore prevent gravity,
     // a rectangle must not be cleared and its next move must set its position outside the view
     for (const auto& i : _tetris_piece) {
-        bool is_oob_left = i->getPosition().x + (tilesize_f.x * 2) > view->getSize().x;
+        bool is_oob_left = i.getPosition().x - (tilesize_f.x) < 0;
 
         if (!is_oob_left){
             next_pos_valid_left = true;
         }else{
             next_pos_valid_left = false;
-            // default should be false
+            return next_pos_valid_left;
         }
     }
     return next_pos_valid_left;
 }
 
-    void Base_shape::gravity(sf::View *view) {
+void Base_shape::gravity(sf::View *view) {
 
-            bool next_pos_valid = is_clear_to_move_down(view);
+        bool next_pos_valid = is_clear_to_move_down(view);
 
-            if (next_pos_valid) {
-                for (auto i : _tetris_piece) {
-                    i->move(Constants::gravity_strength);
-                }
-            }
-    };
-
-void Base_shape::move(sf::View *view) {
-        auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
-        auto cleared = sf::Vector2f(-1, -1);
-        bool key_down = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down);
-        bool key_right = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right);
-        bool key_left = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left);
-        bool next_pos_valid_down = is_clear_to_move_down(view);
-        bool next_pos_valid_right = is_clear_to_move_right(view);
-        bool next_pos_valid_left = is_clear_to_move_left(view);
-
-
-        if (key_down && next_pos_valid_down) {
+        if (next_pos_valid) {
             for (auto& i : _tetris_piece) {
-                i->move(sf::Vector2f(0, (float)Constants::tilesize.y));
-            }
-        }
-        if (key_right && next_pos_valid_right) {
-            for (auto& i : _tetris_piece) {
-                i->move(sf::Vector2f((float)Constants::tilesize.y, 0));
-            }
-        }
-        if (key_left && next_pos_valid_left) {
-            for (auto& i : _tetris_piece) {
-                i->move(sf::Vector2f(-1 * (float)Constants::tilesize.y, 0));
+                i.move(Constants::gravity_strength);
             }
         }
 };
+
+void Base_shape::move(sf::View *view) {
+    bool key_down = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down);
+    bool key_right = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right);
+    bool key_left = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left);
+    bool next_pos_valid_down = is_clear_to_move_down(view);
+    bool next_pos_valid_right = is_clear_to_move_right(view);
+    bool next_pos_valid_left = is_clear_to_move_left(view);
+
+
+    if (key_down && next_pos_valid_down) {
+        for (auto& i : _tetris_piece) {
+            i.move(sf::Vector2f(0, (float)Constants::tilesize.y));
+        }
+    }
+    if (key_right && next_pos_valid_right) {
+        for (auto& i : _tetris_piece) {
+            i.move(sf::Vector2f((float)Constants::tilesize.y, 0));
+        }
+    }
+    if (key_left && next_pos_valid_left) {
+        for (auto& i : _tetris_piece) {
+            i.move(sf::Vector2f(-1 * (float)Constants::tilesize.y, 0));
+        }
+    }
+}
+void Base_shape::try_placing(sf::View* view) {
+    bool can_move = is_clear_to_move_down(view);
+    if (!can_move){
+        _placed = true;
+    }
+}
 bool Base_shape::is_placed() const{
     return _placed;
 }
 
-    void Base_shape::draw(sf::RenderTarget& target, sf::RenderStates states) const{
-        for (auto& i : _tetris_piece) {
-            target.draw(*i, states);
-        }
+void Base_shape::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+    for (auto& i : _tetris_piece) {
+        target.draw(i, states);
     }
+}

@@ -12,8 +12,8 @@ add_executable(shitty-Tetris main.cpp
         Constants.h
         pieces/T_block.cpp
         pieces/T_block.h
-        Piece_collection.cpp
-        Piece_collection.h
+        Block_stack.cpp
+        Block_stack.h
         pieces/O_block.cpp
         pieces/O_block.h
         Block_bag.cpp

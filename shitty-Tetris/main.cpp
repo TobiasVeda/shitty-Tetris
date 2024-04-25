@@ -9,8 +9,12 @@
 #include "pieces/O_block.h"
 #include "pieces/Base_shape.h"
 #include "Block_bag.h"
+#include "Block_stack.h"
 
-//TODO: Fix include order, put defenition of keyup,down,right in class
+//TODO: Fix include order, put defenition of keyup,down,right in class, add const when what the function recieves shouldnt be edited
+
+//TODO: Make a block able to be placed, then add to collection, add collision with collection
+//TODO: Line clear
 
 //when placed, add to collection. when cleared remove from collection, when move check intersect with collection
 
@@ -24,7 +28,9 @@ int main()
     view.setViewport(sf::FloatRect(0, 0, 0.21, 0.67));
     window.setView(view);
 
-    Base_shape a = Block_bag::get_new_block();
+    Base_shape a;
+
+    Block_bag::get_new_block(&a);
 
 
     Tilemap map;
@@ -35,15 +41,18 @@ int main()
     while (window.isOpen()){
         static int delay = 0;
         delay++;
-        if (delay == Constants::gravity_tick_delay){
+        if (delay == Constants::long_game_tick){
+            a.try_placing(&view);
             a.gravity(&view);
+            //a.lineclear osv
             delay = 0;
         }
 
-     a.move(&view);
+        a.move(&view);
 
         if (a.is_placed()){
-            a = Block_bag::get_new_block();
+            Block_stack::add_to_collection(&a);
+            Block_bag::get_new_block(&a);
         }
 
 
@@ -58,6 +67,9 @@ int main()
 
         window.draw(map);
         window.draw(a);
+        for (auto& i : *Block_stack::get_stack()) {
+            window.draw(i);
+        }
 
         window.display();
 

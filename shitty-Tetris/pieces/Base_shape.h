@@ -14,7 +14,7 @@
 class Base_shape : public sf::Drawable{
 //must deconstruct when all blocks are cleared
 protected:
-    std::list<sf::RectangleShape*> _tetris_piece;
+    std::list<sf::RectangleShape> _tetris_piece;
     sf::RectangleShape _r1;
     sf::RectangleShape _r2;
     sf::RectangleShape _r3;
@@ -30,10 +30,12 @@ protected:
     bool is_clear_to_move_left(sf::View*);
 
 public:
+    std::list<sf::RectangleShape>* get_block_list();
     void rotate_block();
     void gravity(sf::View*);
     void move(sf::View*);
     [[nodiscard]] bool is_placed() const;
+    void try_placing(sf::View*);
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
 };
 

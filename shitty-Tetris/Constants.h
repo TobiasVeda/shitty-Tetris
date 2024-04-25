@@ -18,7 +18,10 @@ public:
     static inline const unsigned int tile_count_x = 10;
     static inline const unsigned int tile_count_y = 18;
     static inline const auto game_tick = std::chrono::milliseconds(100);
-    static        const int gravity_tick_delay = 5;
+//    a short game tick is 100ms, but only move and draw run at that,
+//    most other major events run at a longer interval (long_game_tick)
+//    such as gravity and line clear
+    static        const int long_game_tick = 5;
     constexpr static const int level_map[] = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
