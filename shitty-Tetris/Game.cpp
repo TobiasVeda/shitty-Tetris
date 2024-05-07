@@ -101,51 +101,83 @@ const std::vector<std::list<sf::RectangleShape>>* Game::get_stack(){
     return &_block_stack;
 }
 
+bool Game::is_filled(sf::Vector2f &check_coord) {
+
+
+    for (auto& i : _block_stack) {
+        for (auto j = i.begin(); j != i.end(); ++j) {
+
+            if (j->getGlobalBounds().contains(check_coord)){
+                return true;
+            }
+
+        }
+    }
+    return false;
+}
+
+void Game::clear_row(float y) {
+    sf::Vector2f check_coord;
+    const auto bottom_left = sf::Vector2f(
+            _view.getCenter().x - (_view.getSize().x /2) +1,
+            _view.getCenter().y + (_view.getSize().y /2) -1
+    ); // +-1 because "contains" does not check edges of shape
+
+    for (int x = 0; x < Constants::tile_count_x; ++x) {
+        check_coord = sf::Vector2f(
+                bottom_left.x + (float)(x * Constants::tilesize.x),
+                bottom_left.y - (y * (float)Constants::tilesize.y)
+        );
+
+        for (auto& i : _block_stack) {
+            for (auto j = i.begin(); j != i.end(); ++j) {
+
+                if (j->getGlobalBounds().contains(check_coord)){
+                    i.erase(j);
+                    goto BREAK;
+                }
+
+            }
+        }
+        BREAK:
+        bool need_code_below_label;
+    }
+
+}
+
 void Game::try_lineclear() {
-    sf::Vector2f block_check;
+    sf::Vector2f check_coord;
     std::vector<int> coord_line_cleared;
     const auto bottom_left = sf::Vector2f(
             _view.getCenter().x - (_view.getSize().x /2) +1,
             _view.getCenter().y + (_view.getSize().y /2) -1
             ); // +-1 because "contains" does not check edges of shape
 
+
     for (int y = 0; y < Constants::tile_count_y; ++y) {
-        int fill_count_x = 0;
-        bool repeated = false;
+        int fill_count = 0;
+
         for (int x = 0; x < Constants::tile_count_x; ++x) {
-            block_check = sf::Vector2f(
-                    bottom_left.x + (x * Constants::tilesize.x),
-                    bottom_left.y - (y * Constants::tilesize.y)
+            check_coord = sf::Vector2f(
+                    bottom_left.x + (float)(x * Constants::tilesize.x),
+                    bottom_left.y - (float)(y * Constants::tilesize.y)
             );
 
-
-            for (auto& i : _block_stack) {
-                for (auto j = i.begin(); j != i.end(); ++j) {
-
-                    if (fill_count_x == Constants::tile_count_x && j->getGlobalBounds().contains(block_check)){
-                        i.erase(j);
-                        goto BREAK;
-                    } else if (fill_count_x != Constants::tile_count_x && j->getGlobalBounds().contains(block_check)){
-                        fill_count_x++;
-                        goto BREAK;
-                    }else{
-                        x = Constants::tile_count_x;
-                        // no block, row can't be cleared, move up one
-                        goto BREAK;
-                    }
-                }
+            if (!is_filled(check_coord)){
+                break;
+            } else{
+                fill_count++;
             }
-
-            BREAK:
-            if (fill_count_x == Constants::tile_count_x && !repeated){
-                x = -1;
-                repeated = true;
-                float line_cleared_coord = (Constants::tile_count_y +1) - ((block_check.y +1 ) / Constants::tilesize.y);
+            if (fill_count == Constants::tile_count_x){
+                float line_cleared_coord = (Constants::tile_count_y +1) - ((check_coord.y +1 ) / (float)Constants::tilesize.y);
                 coord_line_cleared.emplace_back(line_cleared_coord);
+                clear_row((float)y);
             }
 
         }
-    }
 
+
+    }
+    
     move_line_down(coord_line_cleared);
 }

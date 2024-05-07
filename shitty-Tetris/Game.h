@@ -23,6 +23,8 @@ private:
 
     static void set_bounds();
     static void move_line_down(std::vector<int>&);
+    static void clear_row(float);
+    static bool is_filled(sf::Vector2f&);
 public:
     static void create_window();
     static sf::RenderWindow* get_window();
