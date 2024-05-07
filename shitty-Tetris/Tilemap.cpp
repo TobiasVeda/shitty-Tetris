@@ -9,7 +9,6 @@
     void Tilemap::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 //        called when window.draw(object)
         states.texture = &m_tileset; // apply texture
-
         target.draw(m_vertices, states); // draw tilemap
     }
 
@@ -18,7 +17,7 @@
 
 
         // load the tileset texture
-        if (!m_tileset.loadFromFile(Constants::tile_texture_name))
+        if (!m_tileset.loadFromFile(Constants::texture_name))
             return false;
 
         // resize the vertex array to fit the level size

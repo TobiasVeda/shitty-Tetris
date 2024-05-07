@@ -9,7 +9,6 @@
 #include "Base_shape.h"
 
 class T_block : public Base_shape{
-//decide if r5 shoudl be inherited or not
 public:
     T_block();
 };

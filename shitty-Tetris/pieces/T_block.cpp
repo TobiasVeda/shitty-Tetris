@@ -3,15 +3,31 @@
 //
 
 #include "T_block.h"
+
 T_block::T_block(){
     _placed = false;
-    auto block_color = sf::Color::Magenta;
+    auto block_color = sf::Color(141, 50, 168);
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
 
-    _r1.setPosition(sf::Vector2f(0,0));
-    _r2.setPosition(sf::Vector2f(40,0));
-    _r3.setPosition(sf::Vector2f(80,0));
-    _r4.setPosition(sf::Vector2f(40,40));
+//    _sprite.loadFromFile("40frame.png", sf::IntRect(40, 40, 40, 40));
+
+
+
+
+//    _r1.setPosition(sf::Vector2f(0, 0));
+//    _r2.setPosition(sf::Vector2f(40, 0));
+//    _r3.setPosition(sf::Vector2f(80, 0));
+//    _r4.setPosition(sf::Vector2f(40, 40));
+
+    _r1.setOrigin(sf::Vector2f(60, 20));
+    _r2.setOrigin(sf::Vector2f(20, 20));
+    _r3.setOrigin(sf::Vector2f(-20, 20));
+    _r4.setOrigin(sf::Vector2f(20, -20));
+
+    _r1.setPosition(sf::Vector2f(180, 20));
+    _r2.setPosition(sf::Vector2f(180, 20));
+    _r3.setPosition(sf::Vector2f(180, 20));
+    _r4.setPosition(sf::Vector2f(180, 20));
 //        can be made relative probably
 
     _tetris_piece.push_back(_r1);
@@ -22,14 +38,8 @@ T_block::T_block(){
     for (auto& i : _tetris_piece) {
         // setSize need float, but Constants::tilesize is uint
         i.setSize(tilesize_f);
-    }
-
-    for (auto& i : _tetris_piece) {
-        // setSize need float, but Constants::tilesize is uint
         i.setFillColor(block_color);
+//        i.setTexture(&_sprite);
     }
 
-//        auto half_diagonal = sf::Vector2f((float)80/2, (float)80/2);
-    _rotation_center = sf::Vector2f(120,40);
-//                r2.getPosition() + half_diagonal;
 }

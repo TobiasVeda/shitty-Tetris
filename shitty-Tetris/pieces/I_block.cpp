@@ -1,0 +1,34 @@
+//
+// Created by tobia on 28.04.2024.
+//
+
+#include "I_block.h"
+
+I_block::I_block(){
+    _placed = false;
+    auto block_color = sf::Color::Cyan;
+    auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
+
+    _r1.setOrigin(sf::Vector2f(80, 40));
+    _r2.setOrigin(sf::Vector2f(40, 40));
+    _r3.setOrigin(sf::Vector2f(0, 40));
+    _r4.setOrigin(sf::Vector2f(-40, 40));
+
+    _r1.setPosition(sf::Vector2f(200, 40));
+    _r2.setPosition(sf::Vector2f(200, 40));
+    _r3.setPosition(sf::Vector2f(200, 40));
+    _r4.setPosition(sf::Vector2f(200, 40));
+//        can be made relative probably
+
+    _tetris_piece.push_back(_r1);
+    _tetris_piece.push_back(_r2);
+    _tetris_piece.push_back(_r3);
+    _tetris_piece.push_back(_r4);
+
+    for (auto& i : _tetris_piece) {
+        // setSize need float, but Constants::tilesize is uint
+        i.setSize(tilesize_f);
+        i.setFillColor(block_color);
+    }
+
+}

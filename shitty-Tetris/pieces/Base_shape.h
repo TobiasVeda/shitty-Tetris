@@ -11,7 +11,7 @@
 #include <list>
 
 
-class Base_shape : public sf::Drawable{
+class Base_shape : public sf::Drawable, public sf::Transformable{
 //must deconstruct when all blocks are cleared
 protected:
     std::list<sf::RectangleShape> _tetris_piece;
@@ -19,20 +19,19 @@ protected:
     sf::RectangleShape _r2;
     sf::RectangleShape _r3;
     sf::RectangleShape _r4;
-    sf::RectangleShape _r5;
-// Some blocks have 5 parts
 
-    sf::Vector2f _rotation_center;
+    sf::Transform _transform;
+    sf::Texture _sprite;
     bool _placed;
 
-    bool is_clear_to_move_down(sf::View*);
-    bool is_clear_to_move_right(sf::View*);
-    bool is_clear_to_move_left(sf::View*);
+    bool is_clear_to_move_down();
+    bool is_clear_to_move_right();
+    bool is_clear_to_move_left();
 
 public:
     std::list<sf::RectangleShape>* get_block_list();
     void rotate_block();
-    void gravity(sf::View*);
+    void gravity();
     void move(sf::View*);
     [[nodiscard]] bool is_placed() const;
     void try_placing(sf::View*);
