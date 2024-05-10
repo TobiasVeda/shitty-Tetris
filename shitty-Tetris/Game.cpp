@@ -7,6 +7,17 @@
 #include <map>
 #include "Constants.h"
 #include <algorithm>
+Game::Game(int player) {
+    _window.create(sf::VideoMode(1920, 1080), "shitty Tetris");
+    if (player == 0){
+        _view.setCenter(sf::Vector2f(200,360));
+        _view.setSize(sf::Vector2f(400, 720));
+        _view.setViewport(sf::FloatRect(0, 0, 0.21, 0.67));
+        _window.setView(_view);
+    }
+
+    set_bounds();
+}
 
 void Game::set_bounds() {
     auto size_L_R = sf::Vector2f(1, _view.getSize().y + 2);
@@ -48,7 +59,7 @@ void Game::move_line_down(std::vector<int> &coord_line_cleared) {
             for (int x = 0; x < Constants::tile_count_x; ++x) {
                 block_check = sf::Vector2f(
                         bottom_left.x + (x * Constants::tilesize.x),
-                        bottom_left.y - (y * Constants::tilesize.y) - coord_line_cleared[z]
+                        bottom_left.y - (y * Constants::tilesize.y) - (coord_line_cleared[z] * Constants::tilesize.y)
                 );
 
 
@@ -71,15 +82,8 @@ void Game::move_line_down(std::vector<int> &coord_line_cleared) {
 
 }
 
-void Game::create_window() {
-    _window.create(sf::VideoMode(1920, 1080), "shitty Tetris");
-    _view.setCenter(sf::Vector2f(200,360));
-    _view.setSize(sf::Vector2f(400, 720));
-    _view.setViewport(sf::FloatRect(0, 0, 0.21, 0.67));
-    _window.setView(_view);
 
-    set_bounds();
-}
+
 
 sf::RenderWindow* Game::get_window() {
     return &_window;
@@ -102,7 +106,6 @@ const std::vector<std::list<sf::RectangleShape>>* Game::get_stack(){
 }
 
 bool Game::is_filled(sf::Vector2f &check_coord) {
-
 
     for (auto& i : _block_stack) {
         for (auto j = i.begin(); j != i.end(); ++j) {
@@ -169,8 +172,9 @@ void Game::try_lineclear() {
                 fill_count++;
             }
             if (fill_count == Constants::tile_count_x){
-                float line_cleared_coord = (Constants::tile_count_y +1) - ((check_coord.y +1 ) / (float)Constants::tilesize.y);
+                float line_cleared_coord = (Constants::tile_count_y) - ((check_coord.y +1 ) / (float)Constants::tilesize.y);
                 coord_line_cleared.emplace_back(line_cleared_coord);
+
                 clear_row((float)y);
             }
 

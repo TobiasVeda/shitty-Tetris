@@ -3,9 +3,10 @@
 //
 
 #include "O_block.h"
-#include "../Constants.h"
+#include "../Game.h"
 
-O_block::O_block(){
+O_block::O_block(Game *game){
+    _game = game;
     _placed = false;
     auto block_color = sf::Color::Yellow;
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);

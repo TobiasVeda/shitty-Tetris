@@ -29,6 +29,10 @@ add_executable(shitty-Tetris main.cpp
         pieces/Z_block.h
         pieces/S_block.cpp
         pieces/S_block.h
+        Player.cpp
+        Player.h
+        Process.cpp
+        Process.h
 )
 
 target_link_libraries(shitty-Tetris PRIVATE sfml-system sfml-network sfml-graphics sfml-window)

@@ -7,10 +7,11 @@
 
 #include <SFML/Graphics.hpp>
 #include "Base_shape.h"
+#include "../Game.h"
 
 class L_block : public Base_shape{
 public:
-    L_block();
+    L_block(Game*);
 };
 
 

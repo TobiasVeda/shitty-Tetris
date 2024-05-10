@@ -13,27 +13,27 @@
 class Game {
 private:
     static inline sf::RenderWindow _window;
-    static inline sf::View _view;
-    static inline sf::RectangleShape _bound_L;
-    static inline sf::RectangleShape _bound_R;
-    static inline sf::RectangleShape _bound_D;
-    static inline std::map<std::string, sf::RectangleShape> _bounds;
+    sf::View _view;
+    sf::RectangleShape _bound_L;
+    sf::RectangleShape _bound_R;
+    sf::RectangleShape _bound_D;
+    std::map<std::string, sf::RectangleShape> _bounds;
 
-    static inline std::vector<std::list<sf::RectangleShape>> _block_stack;
+    std::vector<std::list<sf::RectangleShape>> _block_stack;
 
-    static void set_bounds();
-    static void move_line_down(std::vector<int>&);
-    static void clear_row(float);
-    static bool is_filled(sf::Vector2f&);
+    void set_bounds();
+    void move_line_down(std::vector<int>&);
+    void clear_row(float);
+    bool is_filled(sf::Vector2f&);
 public:
-    static void create_window();
+    Game(int);
     static sf::RenderWindow* get_window();
-    static sf::View* get_view();
-    static sf::RectangleShape* get_bounds(std::string);
+    sf::View* get_view();
+    sf::RectangleShape* get_bounds(std::string);
 
-    static void add_to_collection(std::list<sf::RectangleShape>*);
-    static const std::vector<std::list<sf::RectangleShape>>* get_stack();
-    static void try_lineclear();
+    void add_to_collection(std::list<sf::RectangleShape>*);
+    const std::vector<std::list<sf::RectangleShape>>* get_stack();
+    void try_lineclear();
 };
 
 

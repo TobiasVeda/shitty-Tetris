@@ -3,8 +3,10 @@
 //
 
 #include "L_block.h"
+#include "../Game.h"
 
-L_block::L_block(){
+L_block::L_block(Game *game){
+    _game = game;
     _placed = false;
     auto block_color = sf::Color::Blue;
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);

@@ -9,8 +9,9 @@
 #include <random>
 #include <string>
 #include <iostream>
+#include "Game.h"
 
-void Block_bag::get_new_block(Base_shape *block) {
+void Block_bag::get_new_block(Base_shape *block, Game *game) {
 
     if (_bag.empty()) {
         _bag.emplace_back("T");
@@ -28,31 +29,31 @@ void Block_bag::get_new_block(Base_shape *block) {
 
     if (_bag[i] == "T"){
         _bag.erase(_bag.begin() + i);
-        T_block new_player_controlled_block;
+        T_block new_player_controlled_block(game);
         *block = new_player_controlled_block;
     } else if (_bag[i] == "O"){
         _bag.erase(_bag.begin() + i);
-        O_block new_player_controlled_block;
+        O_block new_player_controlled_block(game);
         *block = new_player_controlled_block;
     } else if (_bag[i] == "L"){
         _bag.erase(_bag.begin() + i);
-        L_block new_player_controlled_block;
+        L_block new_player_controlled_block(game);
         *block = new_player_controlled_block;
     } else if (_bag[i] == "I"){
         _bag.erase(_bag.begin() + i);
-        I_block new_player_controlled_block;
+        I_block new_player_controlled_block(game);
         *block = new_player_controlled_block;
     } else if (_bag[i] == "J"){
         _bag.erase(_bag.begin() + i);
-        J_block new_player_controlled_block;
+        J_block new_player_controlled_block(game);
         *block = new_player_controlled_block;
     } else if (_bag[i] == "Z"){
         _bag.erase(_bag.begin() + i);
-        Z_block new_player_controlled_block;
+        Z_block new_player_controlled_block(game);
         *block = new_player_controlled_block;
     } else if (_bag[i] == "S"){
         _bag.erase(_bag.begin() + i);
-        S_block new_player_controlled_block;
+        S_block new_player_controlled_block(game);
         *block = new_player_controlled_block;
     }
 }

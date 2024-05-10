@@ -4,7 +4,8 @@
 
 #include "T_block.h"
 
-T_block::T_block(){
+T_block::T_block(Game *game){
+    _game = game;
     _placed = false;
     auto block_color = sf::Color(141, 50, 168);
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);

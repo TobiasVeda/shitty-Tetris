@@ -9,6 +9,7 @@
 #include "pieces/Base_shape.h"
 #include <string>
 #include <vector>
+#include "Game.h"
 
 class Block_bag {
 protected:
@@ -16,7 +17,7 @@ protected:
         // Linking error if not inline
 
 public:
-    static void get_new_block(Base_shape*); // need parameter to main object
+    static void get_new_block(Base_shape*, Game*); // need pointer to main object
 };
 
 

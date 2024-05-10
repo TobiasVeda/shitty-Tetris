@@ -3,8 +3,10 @@
 //
 
 #include "Z_block.h"
+#include "../Game.h"
 
-Z_block::Z_block(){
+Z_block::Z_block(Game *game){
+    _game = game;
     _placed = false;
     auto block_color = sf::Color::Red;
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);

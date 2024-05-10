@@ -8,11 +8,11 @@
 
 #include <SFML/Graphics.hpp>
 #include "Base_shape.h"
+#include "../Game.h"
 
 class O_block : public Base_shape{
-//decide if r5 shoudl be inherited or not
 public:
-    O_block();
+    O_block(Game*);
 };
 
 
