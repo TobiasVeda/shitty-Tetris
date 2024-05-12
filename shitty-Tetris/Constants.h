@@ -9,9 +9,12 @@
 #include <chrono>
 #include <thread>
 
+
+
 class Constants {
 public:
-
+    enum Directions{Down = 0, Right = 1, Left = 2};
+    enum Block_types{T=0, O=1, L=2, I=3, J=4, Z=5, S=6};
     static inline const std::string texture_name = "tileset.png";
     static inline const sf::Vector2u tilesize = sf::Vector2u(40, 40);
     static inline const sf::Vector2f gravity_strength = sf::Vector2f(0, 40); //related to tilesize

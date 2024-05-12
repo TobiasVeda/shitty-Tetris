@@ -8,7 +8,6 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <list>
-#include <map>
 #include <mutex>
 #include "pieces/Base_shape.h"
 
@@ -20,34 +19,39 @@ protected:
     sf::RectangleShape _bound_L;
     sf::RectangleShape _bound_R;
     sf::RectangleShape _bound_D;
-    std::map<std::string, sf::RectangleShape> _bounds;
 
-    std::vector<std::list<sf::RectangleShape>> _block_stack;
-//    does not need list
+    std::vector<sf::RectangleShape> _block_stack;
 
     void set_bounds();
     void move_line_down(std::vector<int>&);
     void clear_row(float);
     bool is_filled(sf::Vector2f&);
 
-    void move_player(int);
+    void move_player(Constants::Directions);
     void rotate_player();
     void drop_player();
 
 public:
 //    static void create_window();
     Game(int);
-    static sf::RenderWindow* get_window();
-    sf::View* get_view();
-    sf::RectangleShape* get_bounds(std::string);
 
-    void add_to_collection(std::list<sf::RectangleShape>*);
-    const std::vector<std::list<sf::RectangleShape>>* get_stack();
+    void add_player_to_collection();
     void try_lineclear();
     void do_gametick_action();
     void do_action(int);
 
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
+
+    void try_placing_player();
+    void gravity();
+    void try_lineclear();
+
+    bool player_intersects_with_stack();
+    bool player_intersects_with_bounds();
+
+    bool player_clear_to_move_down(bool auto_commit = false);
+    bool player_clear_to_move_right(bool auto_commit = false);
+    bool player_clear_to_move_left(bool auto_commit = false);
 };
 
 

@@ -6,12 +6,13 @@
 #define TILEMAP_BLOCK_BAG_H
 
 #include <SFML/Graphics.hpp>
+#include "Constants.h"
 #include "pieces/Base_shape.h"
 #include <vector>
 
 class Block_bag {
 protected:
-    static inline std::vector<int> _bag;
+    static inline std::vector<Constants::Block_types> _bag;
         // Linking error if not inline
     static int get_new_blocktype_index();
 public:

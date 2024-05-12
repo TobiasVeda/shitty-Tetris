@@ -8,17 +8,17 @@
 #include <random>
 #include "Game.h"
 
-enum{T=0, O=1, L=2, I=3, J=4, Z=5, S=6};
+
 
 int Block_bag::get_new_blocktype_index() {
     if (_bag.empty()) {
-        _bag.emplace_back(T);
-        _bag.emplace_back(O);
-        _bag.emplace_back(L);
-        _bag.emplace_back(I);
-        _bag.emplace_back(J);
-        _bag.emplace_back(Z);
-        _bag.emplace_back(S);
+        _bag.emplace_back(Constants::T);
+        _bag.emplace_back(Constants::O);
+        _bag.emplace_back(Constants::L);
+        _bag.emplace_back(Constants::I);
+        _bag.emplace_back(Constants::J);
+        _bag.emplace_back(Constants::Z);
+        _bag.emplace_back(Constants::S);
     }
 
     std::mt19937 rng(rand() * time(NULL));
@@ -33,25 +33,25 @@ Base_shape Block_bag::get_new_block() {
     int i = get_new_blocktype_index();
 
     switch (_bag[i]) {
-        case T:
+        case Constants::T:
             _bag.erase(_bag.begin() + i);
             return T_block();
-        case O:
+        case Constants::O:
             _bag.erase(_bag.begin() + i);
             return O_block();
-        case L:
+        case Constants::L:
             _bag.erase(_bag.begin() + i);
             return L_block();
-        case I:
+        case Constants::I:
             _bag.erase(_bag.begin() + i);
             return I_block();
-        case J:
+        case Constants::J:
             _bag.erase(_bag.begin() + i);
             return J_block();
-        case Z:
+        case Constants::Z:
             _bag.erase(_bag.begin() + i);
             return Z_block();
-        case S:
+        case Constants::S:
             _bag.erase(_bag.begin() + i);
             return S_block();
         default:
