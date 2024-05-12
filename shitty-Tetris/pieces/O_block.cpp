@@ -2,11 +2,12 @@
 // Created by tobia on 23.04.2024.
 //
 
+#include <SFML/Graphics.hpp>
 #include "O_block.h"
-#include "../Game.h"
 
-O_block::O_block(Game *game){
-    _game = game;
+
+O_block::O_block(){
+
     _placed = false;
     auto block_color = sf::Color::Yellow;
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
@@ -21,15 +22,13 @@ O_block::O_block(Game *game){
     _r3.setPosition(sf::Vector2f(200, 40));
     _r4.setPosition(sf::Vector2f(200, 40));
 
-    _tetris_piece.push_back(_r1);
-    _tetris_piece.push_back(_r2);
-    _tetris_piece.push_back(_r3);
-    _tetris_piece.push_back(_r4);
+    _r1.setSize(tilesize_f);
+    _r2.setSize(tilesize_f);
+    _r3.setSize(tilesize_f);
+    _r4.setSize(tilesize_f);
 
-    for (auto& i : _tetris_piece) {
-        // setSize need float, but Constants::tilesize is uint
-        i.setSize(tilesize_f);
-        i.setFillColor(block_color);
-    }
-
+    _r1.setFillColor(block_color);
+    _r2.setFillColor(block_color);
+    _r3.setFillColor(block_color);
+    _r4.setFillColor(block_color);
 }

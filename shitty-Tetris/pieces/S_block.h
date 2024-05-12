@@ -6,11 +6,10 @@
 #define SHITTY_TETRIS_S_BLOCK_H
 
 #include "Base_shape.h"
-#include "../Game.h"
 
 class S_block : public Base_shape{
 public:
-    S_block(Game*);
+    S_block();
 };
 
 

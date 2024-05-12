@@ -3,13 +3,12 @@
 //
 
 #include "I_block.h"
-#include "../Game.h"
 
-I_block::I_block(Game *game){
-    _game = game;
+I_block::I_block(){
     _placed = false;
     auto block_color = sf::Color::Cyan;
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
+    // setSize need float, but Constants::tilesize is uint
 
     _r1.setOrigin(sf::Vector2f(80, 40));
     _r2.setOrigin(sf::Vector2f(40, 40));
@@ -20,17 +19,14 @@ I_block::I_block(Game *game){
     _r2.setPosition(sf::Vector2f(200, 40));
     _r3.setPosition(sf::Vector2f(200, 40));
     _r4.setPosition(sf::Vector2f(200, 40));
-//        can be made relative probably
 
-    _tetris_piece.push_back(_r1);
-    _tetris_piece.push_back(_r2);
-    _tetris_piece.push_back(_r3);
-    _tetris_piece.push_back(_r4);
+    _r1.setSize(tilesize_f);
+    _r2.setSize(tilesize_f);
+    _r3.setSize(tilesize_f);
+    _r4.setSize(tilesize_f);
 
-    for (auto& i : _tetris_piece) {
-        // setSize need float, but Constants::tilesize is uint
-        i.setSize(tilesize_f);
-        i.setFillColor(block_color);
-    }
-
+    _r1.setFillColor(block_color);
+    _r2.setFillColor(block_color);
+    _r3.setFillColor(block_color);
+    _r4.setFillColor(block_color);
 }

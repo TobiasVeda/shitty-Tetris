@@ -13,9 +13,12 @@
 
 class Constants {
 public:
-    enum Directions{Down = 0, Right = 1, Left = 2};
-    enum Block_types{T=0, O=1, L=2, I=3, J=4, Z=5, S=6};
-    static inline const std::string texture_name = "tileset.png";
+    enum Directions{Down, Right, Left};
+    enum Rotation_direction{Clockwise, Counter_clock};
+    enum Actions{Move_down, Move_right, Move_left, Rotate_clockwise, Rotate_counter_clock, Drop, Nothing};
+    enum Block_types{T, O, L, I, J, Z, S};
+    static inline const std::string texture_name = "tilese.png";
+    static inline const float rotation_amount = 90;
     static inline const sf::Vector2u tilesize = sf::Vector2u(40, 40);
     static inline const sf::Vector2f gravity_strength = sf::Vector2f(0, 40); //related to tilesize
     static inline const unsigned int tile_count_x = 10;
@@ -25,8 +28,7 @@ public:
 //    most other major events run at a longer interval (long_game_tick)
 //    such as gravity and line clear
     static        const int long_game_tick = 10;
-    static        const int short_game_tick = 2;
-    constexpr static const int level_map[] = {
+    static inline const int level_map[] = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

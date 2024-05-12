@@ -25,7 +25,7 @@ protected:
 public:
     std::list<sf::RectangleShape> get_rectangle_list();
     void place();
-    void rotate(int);
+    void rotate(float);
     void move(sf::Vector2f);
     bool intersects(sf::RectangleShape&);
     [[nodiscard]] bool is_placed() const;

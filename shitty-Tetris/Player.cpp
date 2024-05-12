@@ -15,43 +15,44 @@ Player::Player(int player) {
         _key_down = sf::Keyboard::Key::Down;
         _key_right = sf::Keyboard::Key::Right;
         _key_left = sf::Keyboard::Key::Left;
-        _key_rotate = sf::Keyboard::Key::Up;
+        _key_rotate_clockwise = sf::Keyboard::Key::Up;
+
         _key_drop = sf::Keyboard::Key::Space;
     } else if (_player == 1){
         _key_down = sf::Keyboard::Key::S;
         _key_right = sf::Keyboard::Key::D;
         _key_left = sf::Keyboard::Key::A;
-        _key_rotate = sf::Keyboard::Key::W;
+        _key_rotate_clockwise = sf::Keyboard::Key::W;
+
         _key_drop = sf::Keyboard::Key::X;
     } else if (_player == 2){
         _key_down = sf::Keyboard::Key::Down;
         _key_right = sf::Keyboard::Key::Right;
         _key_left = sf::Keyboard::Key::Left;
-        _key_rotate = sf::Keyboard::Key::Up;
+        _key_rotate_clockwise = sf::Keyboard::Key::Up;
+
         _key_drop = sf::Keyboard::Key::Space;
     }
 }
 
-void Player::keyboard_controller(Base_shape *block, bool key_hold) {
-//    return action, base shape
+Constants::Actions Player::keyboard_controller(bool key_hold) {
 
-    //Base_shape::move only allows one action per call (else if, not just if)
-    //Controller allows multiple, but only one is performed at a time, thus clipping into corners is impossible
-    //(or clipping was unintentionally fixed when collision detection was changed¯\_(ツ)_/¯)
     if (sf::Keyboard::isKeyPressed(_key_down)){
-        block->move("down");
+        return Constants::Move_down;
     }
     if (sf::Keyboard::isKeyPressed(_key_right)){
-        block->move("right");
+        return Constants::Move_right;
     }
     if (sf::Keyboard::isKeyPressed(_key_left)){
-        block->move("left");
+        return Constants::Move_left;
     }
-    if (sf::Keyboard::isKeyPressed(_key_rotate) && !key_hold){
-        block->rotate_block();
+    if (sf::Keyboard::isKeyPressed(_key_rotate_clockwise) && !key_hold){
+        return Constants::Rotate_clockwise;
+    } else if (sf::Keyboard::isKeyPressed(_key_rotate_counter_clock) && !key_hold){
+        return Constants::Rotate_counter_clock;
     }
     if (sf::Keyboard::isKeyPressed(_key_drop) && !key_hold){
-        block->drop();
+        return Constants::Drop;
     }
-
+    return Constants::Nothing;
 }

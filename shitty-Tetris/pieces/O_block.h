@@ -5,14 +5,12 @@
 #ifndef TILEMAP_O_BLOCK_H
 #define TILEMAP_O_BLOCK_H
 
-
 #include <SFML/Graphics.hpp>
 #include "Base_shape.h"
-#include "../Game.h"
 
 class O_block : public Base_shape{
 public:
-    O_block(Game*);
+    O_block();
 };
 
 

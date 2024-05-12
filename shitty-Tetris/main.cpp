@@ -11,7 +11,7 @@
 // make move diagonal possible
 //TODO: Error handling when not finding texture, key_hold for multiple inputs
 //when game is not static, implement draw so that you can window.draw(stack)
-
+// Switchcase in player controller? implement counterclock key
 
 
 

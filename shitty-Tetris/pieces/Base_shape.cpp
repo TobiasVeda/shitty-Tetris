@@ -27,35 +27,18 @@ bool Base_shape::intersects(sf::RectangleShape &rectangle){
     }
 }
 
-void Base_shape::rotate(int angle){
-    _r1.rotate(angle);
-    _r2.rotate(angle);
-    _r3.rotate(angle);
-    _r4.rotate(angle);
+void Base_shape::rotate(float degree){
+    _r1.rotate(degree);
+    _r2.rotate(degree);
+    _r3.rotate(degree);
+    _r4.rotate(degree);
 }
 
-
-void Base_shape::move(sf::Vector2f) {
-    if (direction == Constants::Down) {
-
-        _r1.move(down);
-        _r2.move(down);
-        _r3.move(down);
-        _r4.move(down);
-
-    } else if (direction == Constants::Right) {
-
-        _r1.move(right);
-        _r2.move(right);
-        _r3.move(right);
-        _r4.move(right);
-    } else if (direction == Constants::Left) {
-
-        _r1.move(left);
-        _r2.move(left);
-        _r3.move(left);
-        _r4.move(left);
-    }
+void Base_shape::move(sf::Vector2f direction) {
+        _r1.move(direction);
+        _r2.move(direction);
+        _r3.move(direction);
+        _r4.move(direction);
 }
 bool Base_shape::is_placed() const{
     return _placed;

@@ -16,12 +16,13 @@ protected:
     sf::Keyboard::Key _key_down;
     sf::Keyboard::Key _key_right;
     sf::Keyboard::Key _key_left;
-    sf::Keyboard::Key _key_rotate;
+    sf::Keyboard::Key _key_rotate_clockwise;
+    sf::Keyboard::Key _key_rotate_counter_clock;
     sf::Keyboard::Key _key_drop;
 
 public:
     explicit Player(int);
-    void keyboard_controller(Base_shape*, bool);
+    Constants::Actions keyboard_controller(bool);
 };
 
 

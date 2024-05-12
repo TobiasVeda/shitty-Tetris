@@ -1,5 +1,7 @@
 //
-// Created by tobia on 17.04.2024.
+// Modified by tobia on 17.04.2024 from:
+// SFML: Designing your own entities with vertex arrays
+// Source: https://www.sfml-dev.org/tutorials/2.6/graphics-vertex-array.php
 //
 
 #ifndef TILEMAP_TILEMAP_H
@@ -20,6 +22,7 @@ public:
 //    Tilemap();
 
     bool load();
+    void apply_error_texture();
 };
 
 
