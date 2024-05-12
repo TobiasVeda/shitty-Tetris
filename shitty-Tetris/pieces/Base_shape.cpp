@@ -114,29 +114,24 @@ std::list<sf::RectangleShape>* Base_shape::get_block_list() {
 }
 
 void Base_shape::rotate_block(){
-    bool key_rotate = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up);
-
-    if (key_rotate){
-
-        for(auto& i : _tetris_piece){
-            i.rotate(90);
-        }
+    for(auto& i : _tetris_piece){
+        i.rotate(90);
     }
-
 }
 
 void Base_shape::gravity() {
-        bool next_pos_valid = is_clear_to_move_down();
+    bool next_pos_valid = is_clear_to_move_down();
 
-        if (next_pos_valid) {
-            for (auto& i : _tetris_piece) {
-                i.move(Constants::gravity_strength);
-            }
+    if (next_pos_valid) {
+        for (auto& i : _tetris_piece) {
+            i.move(Constants::gravity_strength);
         }
+    }
 
 };
 
 void Base_shape::drop() {
+    // Runs gravity tile_count_y number of times instantly to drop block
     for (int i = 0; i < Constants::tile_count_y; ++i) {
         gravity();
     }

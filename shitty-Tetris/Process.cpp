@@ -20,15 +20,16 @@ void Process::game_loop(int player) {
 
     Base_shape a;
 
-    Block_bag::get_new_block(&a, &game);
+    a = Block_bag::get_new_block();
 
     Tilemap map;
     if (!map.load()) {
 //        return -1;
     }
 
-
+//    Game::get_window()->setActive(true);
     while (Game::get_window()->isOpen()){
+
         static int long_delay = 0;
 
         long_delay++;
@@ -41,7 +42,7 @@ void Process::game_loop(int player) {
             game.try_lineclear();
             if (a.is_placed()){
                 game.add_to_collection(a.get_block_list());
-                Block_bag::get_new_block(&a, &game);
+                a = Block_bag::get_new_block(&game);
             }
             long_delay = 0;
         }
@@ -65,13 +66,9 @@ void Process::game_loop(int player) {
         Game::get_window()->clear(sf::Color::White);
         Game::get_window()->draw(map);
         Game::get_window()->draw(a);
-        for (auto& stack_block : *game.get_stack()) {
-            for (auto& stack_rectangle : stack_block) {
-                Game::get_window()->draw(stack_rectangle);
-                //when game is not static, implement draw so that you can window.draw(stack)
-            }
+        Game::get_window()->draw(game);
 
-        }
+
         Game::get_window()->display();
 
         Constants::wait_game_tick();

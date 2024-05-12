@@ -43,5 +43,4 @@ public:
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
 };
 
-
 #endif //TILEMAP_BASE_SHAPE_H

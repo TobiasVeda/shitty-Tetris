@@ -17,7 +17,7 @@ public:
     static inline const sf::Vector2f gravity_strength = sf::Vector2f(0, 40); //related to tilesize
     static inline const unsigned int tile_count_x = 10;
     static inline const unsigned int tile_count_y = 18;
-    static inline const auto game_tick = std::chrono::milliseconds(50);
+    static inline const auto game_tick = std::chrono::milliseconds(75);
 //    a short game tick is 100ms, but only move and draw run at that,
 //    most other major events run at a longer interval (long_game_tick)
 //    such as gravity and line clear

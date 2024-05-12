@@ -6,15 +6,25 @@
 #include <string>
 #include <map>
 #include "Constants.h"
-#include <algorithm>
+#include "Block_bag.h"
+//void Game::create_window() {
+//    _window.create(sf::VideoMode(1920, 1080), "shitty Tetris");
+//}
+
 Game::Game(int player) {
     _window.create(sf::VideoMode(1920, 1080), "shitty Tetris");
+    _view.setSize(sf::Vector2f(400, 720));
+    _view.setCenter(sf::Vector2f(200,360));
     if (player == 0){
-        _view.setCenter(sf::Vector2f(200,360));
-        _view.setSize(sf::Vector2f(400, 720));
-        _view.setViewport(sf::FloatRect(0, 0, 0.21, 0.67));
-        _window.setView(_view);
+        _view.setViewport(sf::FloatRect(0.356f, 0.1, 0.24f, 0.75));
+    } else if (player == 1){
+        _view.setViewport(sf::FloatRect(0.13f, 0.1, 0.24f, 0.75));
+    } else if (player == 2){
+        _view.setViewport(sf::FloatRect(0.63f, 0.1, 0.24f, 0.75));
     }
+    _window.setView(_view);
+
+    _player_controlled_block = Block_bag::get_new_block()
 
     set_bounds();
 }
@@ -184,4 +194,56 @@ void Game::try_lineclear() {
     }
     
     move_line_down(coord_line_cleared);
+}
+
+void Game::do_action(int action) {
+
+    switch (action) {
+        case 0:
+            move_player(action);
+        case 1:
+            move_player(action);
+        case 2:
+            move_player(action);
+        case 3:
+            drop_player();
+        case 4:
+            rotate_player();
+    }
+
+}
+
+void Game::move_player(int direction){
+    bool next_pos_valid_down = is_clear_to_move_down();
+    bool next_pos_valid_right = is_clear_to_move_right();
+    bool next_pos_valid_left = is_clear_to_move_left();
+
+    if (direction == "down" && next_pos_valid_down) {
+        auto down = sf::Vector2f(0, (float)Constants::tilesize.y);
+        for (auto& i : _tetris_piece) {
+            i.move(down);
+        }
+    } else if (direction == "right" && next_pos_valid_right) {
+        auto right = sf::Vector2f((float)Constants::tilesize.y, 0);
+        for (auto& i : _tetris_piece) {
+            i.move(right);
+        }
+    } else if (direction == "left" && next_pos_valid_left) {
+        auto left = sf::Vector2f(-1 * (float)Constants::tilesize.y, 0);
+        for (auto& i : _tetris_piece) {
+            i.move(left);
+        }
+    }
+}
+
+void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+
+//    target.draw(_player_controlled_block, states);
+
+    for (auto& stack_block : _block_stack) {
+        for (auto& stack_rectangle : stack_block) {
+            target.draw(stack_rectangle, states);
+        }
+    }
+
 }
