@@ -161,6 +161,14 @@ build CMakeFiles\shitty-Tetris.dir\Process.cpp.obj: CXX_COMPILER__shitty-Tetris_
   TARGET_COMPILE_PDB = CMakeFiles\shitty-Tetris.dir\
   TARGET_PDB = shitty-Tetris.pdb
 
+build CMakeFiles\shitty-Tetris.dir\UI.cpp.obj: CXX_COMPILER__shitty-Tetris_unscanned_Debug C$:\Users\tobia\shitty-Tetris\shitty-Tetris\UI.cpp || cmake_object_order_depends_target_shitty-Tetris
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -std:c++17 -MDd -Zi
+  INCLUDES = -external:IC:\Users\tobia\.vcpkg-clion\vcpkg\installed\x64-windows\include -external:W0
+  OBJECT_DIR = CMakeFiles\shitty-Tetris.dir
+  OBJECT_FILE_DIR = CMakeFiles\shitty-Tetris.dir
+  TARGET_COMPILE_PDB = CMakeFiles\shitty-Tetris.dir\
+  TARGET_PDB = shitty-Tetris.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target shitty-Tetris
@@ -169,7 +177,7 @@ build CMakeFiles\shitty-Tetris.dir\Process.cpp.obj: CXX_COMPILER__shitty-Tetris_
 #############################################
 # Link the executable shitty-Tetris.exe
 
-build shitty-Tetris.exe: CXX_EXECUTABLE_LINKER__shitty-Tetris_Debug CMakeFiles\shitty-Tetris.dir\main.cpp.obj CMakeFiles\shitty-Tetris.dir\Tilemap.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\Base_shape.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\T_block.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\O_block.cpp.obj CMakeFiles\shitty-Tetris.dir\Block_bag.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\L_block.cpp.obj CMakeFiles\shitty-Tetris.dir\Game.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\I_block.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\J_block.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\Z_block.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\S_block.cpp.obj CMakeFiles\shitty-Tetris.dir\Player.cpp.obj CMakeFiles\shitty-Tetris.dir\Process.cpp.obj | C$:\Users\tobia\.vcpkg-clion\vcpkg\installed\x64-windows\debug\lib\sfml-network-d.lib C$:\Users\tobia\.vcpkg-clion\vcpkg\installed\x64-windows\debug\lib\sfml-graphics-d.lib C$:\Users\tobia\.vcpkg-clion\vcpkg\installed\x64-windows\debug\lib\sfml-window-d.lib C$:\Users\tobia\.vcpkg-clion\vcpkg\installed\x64-windows\debug\lib\sfml-system-d.lib
+build shitty-Tetris.exe: CXX_EXECUTABLE_LINKER__shitty-Tetris_Debug CMakeFiles\shitty-Tetris.dir\main.cpp.obj CMakeFiles\shitty-Tetris.dir\Tilemap.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\Base_shape.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\T_block.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\O_block.cpp.obj CMakeFiles\shitty-Tetris.dir\Block_bag.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\L_block.cpp.obj CMakeFiles\shitty-Tetris.dir\Game.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\I_block.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\J_block.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\Z_block.cpp.obj CMakeFiles\shitty-Tetris.dir\pieces\S_block.cpp.obj CMakeFiles\shitty-Tetris.dir\Player.cpp.obj CMakeFiles\shitty-Tetris.dir\Process.cpp.obj CMakeFiles\shitty-Tetris.dir\UI.cpp.obj | C$:\Users\tobia\.vcpkg-clion\vcpkg\installed\x64-windows\debug\lib\sfml-network-d.lib C$:\Users\tobia\.vcpkg-clion\vcpkg\installed\x64-windows\debug\lib\sfml-graphics-d.lib C$:\Users\tobia\.vcpkg-clion\vcpkg\installed\x64-windows\debug\lib\sfml-window-d.lib C$:\Users\tobia\.vcpkg-clion\vcpkg\installed\x64-windows\debug\lib\sfml-system-d.lib
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = C:\Users\tobia\.vcpkg-clion\vcpkg\installed\x64-windows\debug\lib\sfml-network-d.lib  C:\Users\tobia\.vcpkg-clion\vcpkg\installed\x64-windows\debug\lib\sfml-graphics-d.lib  C:\Users\tobia\.vcpkg-clion\vcpkg\installed\x64-windows\debug\lib\sfml-window-d.lib  C:\Users\tobia\.vcpkg-clion\vcpkg\installed\x64-windows\debug\lib\sfml-system-d.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

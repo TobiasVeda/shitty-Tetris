@@ -8,9 +8,10 @@
 #include <random>
 #include "Game.h"
 
+Constants::Block_types Block_bag::get_block_from_bag(){
+    // Start with a full bag, and randomly removes one block for each call.
+    // When bag is empty, it is refilled, and blocks are again randomly removed.
 
-
-int Block_bag::get_new_blocktype_index() {
     if (_bag.empty()) {
         _bag.emplace_back(Constants::T);
         _bag.emplace_back(Constants::O);
@@ -25,37 +26,47 @@ int Block_bag::get_new_blocktype_index() {
     std::uniform_int_distribution<int> gen(0, _bag.size()-1);
     int i = gen(rng);
 
-    return i;
+    Constants::Block_types return_value = _bag[i];
+    _bag.erase(_bag.begin() + i);
+    return return_value;
 }
 
-Base_shape Block_bag::get_new_block() {
+Constants::Block_types Block_bag::get_new_blocktype_index() {
 
-    int i = get_new_blocktype_index();
+    int number_of_next = 5;
+    while(_next.size() < number_of_next){
 
-    switch (_bag[i]) {
+        _next.emplace_back(get_block_from_bag());
+    }
+
+    Constants::Block_types return_value = _next[0];
+    _next.erase(_next.begin());
+    return return_value;
+}
+
+Base_shape Block_bag::get_new_block(Constants::Block_types type) {
+
+    switch (type) {
         case Constants::T:
-            _bag.erase(_bag.begin() + i);
             return T_block();
         case Constants::O:
-            _bag.erase(_bag.begin() + i);
             return O_block();
         case Constants::L:
-            _bag.erase(_bag.begin() + i);
             return L_block();
         case Constants::I:
-            _bag.erase(_bag.begin() + i);
             return I_block();
         case Constants::J:
-            _bag.erase(_bag.begin() + i);
             return J_block();
         case Constants::Z:
-            _bag.erase(_bag.begin() + i);
             return Z_block();
         case Constants::S:
-            _bag.erase(_bag.begin() + i);
             return S_block();
         default:
             return L_block();
     }
 
+}
+
+std::vector<Constants::Block_types>& Block_bag::get_next_vector() {
+    return _next;
 }

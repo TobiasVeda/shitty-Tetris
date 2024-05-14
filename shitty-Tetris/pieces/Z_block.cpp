@@ -4,9 +4,10 @@
 
 #include <SFML/Graphics.hpp>
 #include "Z_block.h"
+#include "../Constants.h"
 
 Z_block::Z_block(){
-
+    _type = Constants::Block_types::Z;
     _placed = false;
     auto block_color = sf::Color::Red;
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);

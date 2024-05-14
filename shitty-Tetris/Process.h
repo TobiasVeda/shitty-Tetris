@@ -9,7 +9,7 @@
 
 class Process {
 public:
-    static void game_loop(int);
+    static void game_loop(sf::RenderWindow&, int);
 //    static void gravity_loop();
 };
 

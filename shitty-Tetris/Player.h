@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "pieces/Base_shape.h"
+#include "Constants.h"
 
 class Player {
 protected:
@@ -19,7 +20,7 @@ protected:
     sf::Keyboard::Key _key_rotate_clockwise;
     sf::Keyboard::Key _key_rotate_counter_clock;
     sf::Keyboard::Key _key_drop;
-
+    sf::Keyboard::Key _key_hold;
 public:
     explicit Player(int);
     Constants::Actions keyboard_controller(bool);

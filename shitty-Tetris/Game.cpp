@@ -3,27 +3,28 @@
 //
 
 #include "Game.h"
-#include <string>
 #include "Constants.h"
 #include "Block_bag.h"
-//void Game::create_window() {
-//    _window.create(sf::VideoMode(1920, 1080), "shitty Tetris");
-//}
 
-Game::Game(int player) {
-    _window.create(sf::VideoMode(1920, 1080), "shitty Tetris");
-    _view.setSize(sf::Vector2f(400, 720));
-    _view.setCenter(sf::Vector2f(200,360));
+Game::Game(sf::RenderWindow &window, int player) {
+
+    _view.setSize(sf::Vector2f(600, 720));
+    _view.setCenter(sf::Vector2f(300,360));
     if (player == 0){
-        _view.setViewport(sf::FloatRect(0.356f, 0.1, 0.24f, 0.75));
+        _view.setViewport(sf::FloatRect(0.356f, 0.1, 0.36f, 0.75));
     } else if (player == 1){
         _view.setViewport(sf::FloatRect(0.13f, 0.1, 0.24f, 0.75));
     } else if (player == 2){
         _view.setViewport(sf::FloatRect(0.63f, 0.1, 0.24f, 0.75));
     }
-    _window.setView(_view);
+
+    window.setView(_view);
 
     _player_controlled_block = Block_bag::get_new_block();
+    _held_this_turn = false;
+
+    test = Block_bag::get_new_block(Constants::T);
+    test.move(sf::Vector2f(326, 60));
 
     set_bounds();
 }
@@ -37,16 +38,16 @@ void Game::set_bounds() {
     _bound_D.setSize(size_B);
 
     _bound_L.setPosition(
-            (_view.getCenter().x - (_view.getSize().x /2) - _bound_L.getSize().x),
-            (_view.getCenter().y - (_view.getSize().y /2))
+            _view.getCenter().x - (_view.getSize().x /2) - _bound_L.getSize().x,
+            _view.getCenter().y - (_view.getSize().y /2)
             );
     _bound_R.setPosition(
-            (_view.getCenter().x + (_view.getSize().x /2)),
-            (_view.getCenter().y - (_view.getSize().y /2))
+            _view.getCenter().x - (_view.getSize().x /2) + (Constants::tilesize.x * Constants::tile_count_x),
+            _view.getCenter().y - (_view.getSize().y /2)
             );
     _bound_D.setPosition(
-            (_view.getCenter().x - (_view.getSize().x /2) -1),
-            (_view.getCenter().y + (_view.getSize().y /2))
+            _view.getCenter().x - (_view.getSize().x /2) -1,
+            _view.getCenter().y + (_view.getSize().y /2)
             );
 }
 
@@ -56,40 +57,20 @@ void Game::set_bounds() {
 void Game::add_player_to_collection() {
     // Does not check for duplicates. Should be sure that rectangles added does
     // not overlap with already existing rectangles.
-    // Should add a copy to _block_stack
-    for (const auto i : _player_controlled_block.get_rectangle_list()) {
+    for (const auto& i : _player_controlled_block.get_rectangle_list()) {
         _block_stack.emplace_back(i);
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 
     target.draw(_player_controlled_block, states);
+    target.draw(test, states);
 
     for (auto& i : _block_stack) {
             target.draw(i, states);
     }
 
-}
-
-void Game::do_gametick_action() {
-    try_placing_player();
-    gravity();
-    try_lineclear();
-    if (_player_controlled_block.is_placed()){
-        add_player_to_collection();
-        _player_controlled_block = Block_bag::get_new_block();
-    }
 }
 
 void Game::move_player(Constants::Directions direction){
@@ -251,6 +232,7 @@ void Game::drop_player(){
     for (int i = 0; i < Constants::tile_count_y; ++i) {
         gravity();
     }
+    _player_controlled_block.place();
 }
 
 
@@ -261,11 +243,19 @@ void Game::try_placing_player(){
         _player_controlled_block.place();
     }
 }
-
-sf::RenderWindow& Game::get_window() {
-    return _window;
+void Game::new_round(){
+    add_player_to_collection();
+    _player_controlled_block = Block_bag::get_new_block();
+    _held_this_turn = false;
 }
-
+void Game::do_gametick_action() {
+    try_placing_player();
+    gravity();
+    try_lineclear();
+    if (_player_controlled_block.is_placed()){
+        new_round();
+    }
+}
 
 void Game::do_action(Constants::Actions action) {
 
@@ -290,9 +280,31 @@ void Game::do_action(Constants::Actions action) {
         case Constants::Drop:
             drop_player();
             break;
+        case Constants::Hold:
+            if (!_held_this_turn) {
+                hold_player();
+            }
+            break;
     }
 
 }
+
+void Game::hold_player(){
+    // If first call: The type of player block is stored, and player is given a new block.
+    // If not first call: Player type is stored, and player is given a new block with the previous stored type.
+    static bool empty = true;
+    _held_this_turn = true;
+    if (empty){
+        _held_block = _player_controlled_block.get_blocktype();
+        _player_controlled_block = Block_bag::get_new_block();
+        empty = false;
+    } else{
+        Constants::Block_types temp_type = _held_block;
+        _held_block = _player_controlled_block.get_blocktype();
+        _player_controlled_block = Block_bag::get_new_block(temp_type);
+    }
+}
+
 bool Game::is_filled(sf::Vector2f &check_coord) {
     for (auto& i : _block_stack) {
         if (i.getGlobalBounds().contains(check_coord)){
@@ -375,7 +387,7 @@ void Game::clear_row(float y) {
 }
 
 void Game::move_line_down(std::vector<int> &coord_line_cleared) {
-    // Doesnt always work, yet
+    // Doesn't always work, yet
 
     sf::Vector2f block_check;
     const auto bottom_left = sf::Vector2f(

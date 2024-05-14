@@ -3,7 +3,6 @@
 //
 #include <SFML/Graphics.hpp>
 #include "Base_shape.h"
-#include "../Constants.h"
 #include <list>
 
 std::list<sf::RectangleShape> Base_shape::get_rectangle_list() {
@@ -14,7 +13,7 @@ void Base_shape::place(){
     _placed = true;
 }
 
-bool Base_shape::intersects(sf::RectangleShape &rectangle){
+bool Base_shape::intersects(sf::RectangleShape &rectangle) const{
     bool r1_intersect = _r1.getGlobalBounds().intersects(rectangle.getGlobalBounds());
     bool r2_intersect = _r2.getGlobalBounds().intersects(rectangle.getGlobalBounds());
     bool r3_intersect = _r3.getGlobalBounds().intersects(rectangle.getGlobalBounds());
@@ -34,7 +33,7 @@ void Base_shape::rotate(float degree){
     _r4.rotate(degree);
 }
 
-void Base_shape::move(sf::Vector2f direction) {
+void Base_shape::move(sf::Vector2f direction){
         _r1.move(direction);
         _r2.move(direction);
         _r3.move(direction);
@@ -42,6 +41,10 @@ void Base_shape::move(sf::Vector2f direction) {
 }
 bool Base_shape::is_placed() const{
     return _placed;
+}
+
+Constants::Block_types Base_shape::get_blocktype() const{
+    return _type;
 }
 
 void Base_shape::draw(sf::RenderTarget& target, sf::RenderStates states) const{

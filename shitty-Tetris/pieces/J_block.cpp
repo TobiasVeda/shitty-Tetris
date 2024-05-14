@@ -2,10 +2,12 @@
 // Created by tobia on 28.04.2024.
 //
 
+#include <SFML/Graphics.hpp>
 #include "J_block.h"
-
+#include "../Constants.h"
 
 J_block::J_block(){
+    _type = Constants::Block_types::J;
     _placed = false;
     auto block_color = sf::Color(251, 148, 3);
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);

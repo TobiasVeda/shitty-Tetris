@@ -7,15 +7,20 @@
 #include "Constants.h"
 #include "Game.h"
 #include "Player.h"
+#include "UI.h"
 
-void Process::game_loop(int player) {
+
+void Process::game_loop(sf::RenderWindow &window, int player) {
+
+    window.setActive(true);
 
     bool key_hold = false;
 
-    Game game(player);
+    Game game(window, player);
 
     Player p(player);
 
+    UI ui;
 
     Tilemap map;
     try {
@@ -28,9 +33,8 @@ void Process::game_loop(int player) {
 
 
 
+    while (window.isOpen()){
 
-//    Game::get_window()->setActive(true);
-    while (Game::get_window().isOpen()){
 
         static int long_delay = 0;
 
@@ -44,30 +48,17 @@ void Process::game_loop(int player) {
             long_delay = 0;
         }
 
+        window.clear(sf::Color::White);
 
-        sf::Event event{};
-        while (Game::get_window().pollEvent(event)){
-            if(event.type == sf::Event::Closed) {
-                Game::get_window().close();
-            }
-            if (event.type == sf::Event::KeyPressed){
-                key_hold = true;
-            }
-            if (event.type == sf::Event::KeyReleased){
-                key_hold = false;
-            }
+        window.draw(map);
+        window.draw(ui);
+        window.draw(game);
 
-        }
+        window.display();
 
-
-        Game::get_window().clear(sf::Color::White);
-
-        Game::get_window().draw(map);
-        Game::get_window().draw(game);
-
-        Game::get_window().display();
 
         Constants::wait_game_tick();
+
     }
 
 }

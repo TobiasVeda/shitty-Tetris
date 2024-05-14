@@ -4,10 +4,10 @@
 
 #include <SFML/Graphics.hpp>
 #include "O_block.h"
-
+#include "../Constants.h"
 
 O_block::O_block(){
-
+    _type = Constants::Block_types::O;
     _placed = false;
     auto block_color = sf::Color::Yellow;
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);

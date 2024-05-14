@@ -13,10 +13,13 @@
 class Block_bag {
 protected:
     static inline std::vector<Constants::Block_types> _bag;
-        // Linking error if not inline
-    static int get_new_blocktype_index();
+    static inline std::vector<Constants::Block_types> _next;
+
+    static Constants::Block_types get_block_from_bag();
+    static Constants::Block_types get_new_blocktype_index();
 public:
-    static Base_shape get_new_block(); // need pointer to main object
+    static Base_shape get_new_block(Constants::Block_types type = get_new_blocktype_index());
+    static std::vector<Constants::Block_types>& get_next_vector();
 };
 
 

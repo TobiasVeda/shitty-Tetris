@@ -6,13 +6,15 @@
 #define TILEMAP_BASE_SHAPE_H
 
 #include <SFML/Graphics.hpp>
-#include "../Constants.h"
 #include <list>
+#include "../Constants.h"
 
 
 class Base_shape : public sf::Drawable, public sf::Transformable{
 
 protected:
+    Constants::Block_types _type;
+
     sf::RectangleShape _r1;
     sf::RectangleShape _r2;
     sf::RectangleShape _r3;
@@ -27,8 +29,9 @@ public:
     void place();
     void rotate(float);
     void move(sf::Vector2f);
-    bool intersects(sf::RectangleShape&);
+    [[nodiscard]] bool intersects(sf::RectangleShape&) const;
     [[nodiscard]] bool is_placed() const;
+    [[nodiscard]] Constants::Block_types get_blocktype() const;
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
 };
 

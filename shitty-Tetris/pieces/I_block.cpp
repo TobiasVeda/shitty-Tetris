@@ -2,9 +2,12 @@
 // Created by tobia on 28.04.2024.
 //
 
+#include <SFML/Graphics.hpp>
 #include "I_block.h"
+#include "../Constants.h"
 
 I_block::I_block(){
+    _type = Constants::Block_types::I;
     _placed = false;
     auto block_color = sf::Color::Cyan;
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
