@@ -6,9 +6,8 @@
 #include "Tilemap.h"
 #include "Constants.h"
 #include "Game.h"
-#include "Player.h"
+#include "Keybinds.h"
 #include "UI.h"
-
 
 void Process::game_loop(sf::RenderWindow &window, int player) {
 
@@ -16,13 +15,13 @@ void Process::game_loop(sf::RenderWindow &window, int player) {
 
     bool key_hold = false;
 
-    Game game(window, player);
+    static Game game(window, player);
 
-    Player p(player);
+    static Keybinds keybinds(player);
 
-    UI ui;
+    static UI ui;
 
-    Tilemap map;
+    static Tilemap map;
     try {
         if (!map.load()) {
             throw -1;
@@ -33,14 +32,15 @@ void Process::game_loop(sf::RenderWindow &window, int player) {
 
 
 
-    while (window.isOpen()){
+//    while (window.isOpen()){
 
 
         static int long_delay = 0;
 
         long_delay++;
 
-        game.do_action(p.keyboard_controller(key_hold));
+        game.do_action(keybinds);
+        ui.update(game.get_held_type(), game.get_scoreboard());
 
 
         if (long_delay == Constants::long_game_tick){
@@ -51,14 +51,13 @@ void Process::game_loop(sf::RenderWindow &window, int player) {
         window.clear(sf::Color::White);
 
         window.draw(map);
-        window.draw(ui);
         window.draw(game);
-
+        window.draw(ui);
         window.display();
 
 
-        Constants::wait_game_tick();
-
-    }
+//        Constants::wait_game_tick();
+//
+//    }
 
 }

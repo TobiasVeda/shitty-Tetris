@@ -6,7 +6,7 @@
 #include "L_block.h"
 #include "../Constants.h"
 
-L_block::L_block(){
+L_block::L_block(sf::Vector2f position){
     _type = Constants::Block_types::L;
     _placed = false;
     auto block_color = sf::Color::Blue;
@@ -17,10 +17,10 @@ L_block::L_block(){
     _r3.setOrigin(sf::Vector2f(-20, 20));
     _r4.setOrigin(sf::Vector2f(-20, 60));
 
-    _r1.setPosition(sf::Vector2f(180, 60));
-    _r2.setPosition(sf::Vector2f(180, 60));
-    _r3.setPosition(sf::Vector2f(180, 60));
-    _r4.setPosition(sf::Vector2f(180, 60));
+    _r1.setPosition(position);
+    _r2.setPosition(position);
+    _r3.setPosition(position);
+    _r4.setPosition(position);
 
     _r1.setSize(tilesize_f);
     _r2.setSize(tilesize_f);

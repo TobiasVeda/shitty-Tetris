@@ -5,6 +5,8 @@
 #include "Game.h"
 #include "Constants.h"
 #include "Block_bag.h"
+#include "Keybinds.h"
+#include <vector>
 
 Game::Game(sf::RenderWindow &window, int player) {
 
@@ -13,9 +15,9 @@ Game::Game(sf::RenderWindow &window, int player) {
     if (player == 0){
         _view.setViewport(sf::FloatRect(0.356f, 0.1, 0.36f, 0.75));
     } else if (player == 1){
-        _view.setViewport(sf::FloatRect(0.13f, 0.1, 0.24f, 0.75));
+        _view.setViewport(sf::FloatRect(0.13f, 0.1, 0.36f, 0.75));
     } else if (player == 2){
-        _view.setViewport(sf::FloatRect(0.63f, 0.1, 0.24f, 0.75));
+        _view.setViewport(sf::FloatRect(0.63f, 0.1, 0.36f, 0.75));
     }
 
     window.setView(_view);
@@ -23,8 +25,10 @@ Game::Game(sf::RenderWindow &window, int player) {
     _player_controlled_block = Block_bag::get_new_block();
     _held_this_turn = false;
 
-    test = Block_bag::get_new_block(Constants::T);
-    test.move(sf::Vector2f(326, 60));
+    _score = 0;
+    _level = 1;
+    _lines_cleared = 0;
+    _is_dead = false;
 
     set_bounds();
 }
@@ -65,7 +69,6 @@ void Game::add_player_to_collection() {
 void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 
     target.draw(_player_controlled_block, states);
-    target.draw(test, states);
 
     for (auto& i : _block_stack) {
             target.draw(i, states);
@@ -83,6 +86,7 @@ void Game::move_player(Constants::Directions direction){
     if (direction == Constants::Down && next_pos_valid_down){
         auto down = sf::Vector2f(0, (float)Constants::tilesize.y);
         _player_controlled_block.move(down);
+        _score += calculate_move_points();
     }
     if (direction == Constants::Right && next_pos_valid_right){
         auto right = sf::Vector2f( (float)Constants::tilesize.y, 0);
@@ -221,16 +225,18 @@ bool Game::player_intersects_with_stack(){
     return false;
 }
 
-void Game::gravity() {
+bool Game::gravity() {
     // Test will automatically move block if allowed (auto_commit = true)
-    player_clear_to_move_down(true);
+    return player_clear_to_move_down(true);
 }
 
 
 void Game::drop_player(){
     // Runs gravity tile_count_y number of times instantly to drop block
     for (int i = 0; i < Constants::tile_count_y; ++i) {
-        gravity();
+        if (gravity()){
+            _score += calculate_drop_points();
+        }
     }
     _player_controlled_block.place();
 }
@@ -243,48 +249,58 @@ void Game::try_placing_player(){
         _player_controlled_block.place();
     }
 }
+
+void Game::try_death(){
+    if (player_intersects_with_stack()){
+        _is_dead = true;
+    }
+}
 void Game::new_round(){
     add_player_to_collection();
     _player_controlled_block = Block_bag::get_new_block();
     _held_this_turn = false;
 }
+void Game::end_game(){
+    exit(0);
+}
 void Game::do_gametick_action() {
+    if (_is_dead){
+        end_game();
+    }
     try_placing_player();
     gravity();
     try_lineclear();
+    try_levelup();
     if (_player_controlled_block.is_placed()){
         new_round();
+        try_death();
     }
 }
 
-void Game::do_action(Constants::Actions action) {
+void Game::do_action(Keybinds &keybinds) {
 
-    switch (action) {
-        case Constants::Nothing:
-            return;
-        case Constants::Move_down:
-            move_player(Constants::Down);
-            break;
-        case Constants::Move_right:
-            move_player(Constants::Right);
-            break;
-        case Constants::Move_left:
-            move_player(Constants::Left);
-            break;
-        case Constants::Rotate_clockwise:
-            rotate_player(Constants::Clockwise);
-            break;
-        case Constants::Rotate_counter_clock:
-            rotate_player(Constants::Counter_clock);
-            break;
-        case Constants::Drop:
-            drop_player();
-            break;
-        case Constants::Hold:
-            if (!_held_this_turn) {
-                hold_player();
-            }
-            break;
+    if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Move_down))){
+        move_player(Constants::Directions::Down);
+    }
+    if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Move_right))){
+        move_player(Constants::Directions::Right);
+    }
+    if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Move_left))){
+        move_player(Constants::Directions::Left);
+    }
+    if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Rotate_clockwise))){
+        rotate_player(Constants::Rotation_direction::Clockwise);
+    }
+    else if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Rotate_counter_clock))) {
+        rotate_player(Constants::Rotation_direction::Counter_clock);
+    }
+    if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Drop))) {
+        drop_player();
+    }
+    if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Hold))) {
+        if (!_held_this_turn){
+            hold_player();
+        }
     }
 
 }
@@ -314,7 +330,41 @@ bool Game::is_filled(sf::Vector2f &check_coord) {
     return false;
 }
 
-void Game::try_lineclear() {
+void Game::try_levelup(){
+    // 10 lines cleared increases the level by 1.
+    float new_level = ((float)_lines_cleared / 10 ) + 1;
+    _level = floor(new_level);
+}
+
+int Game::calculate_clear_points(int lines_count){
+    // A block have the maximum length of 4.
+
+    if (lines_count == 1){
+        return 100 * _level;
+    } else if (lines_count == 2){
+        return 300 * _level;
+    } else if (lines_count == 3){
+        return 500 * _level;
+    } else if(lines_count == 4){
+        return 800 * _level;
+    } else{
+        return 0;
+    }
+}
+
+int Game::calculate_drop_points(){
+    return 2 * _level;
+}
+
+int Game::calculate_move_points(){
+    return 1 * _level;
+}
+
+std::vector<int> Game::get_scoreboard(){
+    return std::vector{_score, _level, _lines_cleared};
+}
+
+void Game::try_lineclear(){
     sf::Vector2f check_coord;
     std::vector<int> coord_line_cleared;
 
@@ -354,7 +404,8 @@ void Game::try_lineclear() {
 
 
     }
-
+    _score += calculate_clear_points((int)coord_line_cleared.size());
+    _lines_cleared += (int)coord_line_cleared.size() * 5;
     move_line_down(coord_line_cleared);
 }
 
@@ -384,6 +435,10 @@ void Game::clear_row(float y) {
 
     }
 
+}
+
+Constants::Block_types Game::get_held_type(){
+    return _held_block;
 }
 
 void Game::move_line_down(std::vector<int> &coord_line_cleared) {

@@ -29,8 +29,8 @@ add_executable(shitty-Tetris main.cpp
         pieces/Z_block.h
         pieces/S_block.cpp
         pieces/S_block.h
-        Player.cpp
-        Player.h
+        Keybinds.cpp
+        Keybinds.h
         Process.cpp
         Process.h
         UI.cpp

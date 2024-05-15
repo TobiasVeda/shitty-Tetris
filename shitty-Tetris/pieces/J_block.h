@@ -5,11 +5,12 @@
 #ifndef SHITTY_TETRIS_J_BLOCK_H
 #define SHITTY_TETRIS_J_BLOCK_H
 
+#include <SFML/Graphics.hpp>
 #include "Base_shape.h"
 
 class J_block : public Base_shape{
 public:
-    J_block();
+    J_block(sf::Vector2f position = sf::Vector2f(0, 0));
 };
 
 

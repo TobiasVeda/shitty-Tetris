@@ -39,6 +39,14 @@ void Base_shape::move(sf::Vector2f direction){
         _r3.move(direction);
         _r4.move(direction);
 }
+
+void Base_shape::set_position(sf::Vector2f position){
+        _r1.setPosition(position);
+        _r2.setPosition(position);
+        _r3.setPosition(position);
+        _r4.setPosition(position);
+}
+
 bool Base_shape::is_placed() const{
     return _placed;
 }

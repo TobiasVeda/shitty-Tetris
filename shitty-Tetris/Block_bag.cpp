@@ -48,23 +48,22 @@ Base_shape Block_bag::get_new_block(Constants::Block_types type) {
 
     switch (type) {
         case Constants::T:
-            return T_block();
+            return T_block(sf::Vector2f(180, 20));
         case Constants::O:
-            return O_block();
+            return O_block(sf::Vector2f(200, 40));
         case Constants::L:
-            return L_block();
+            return L_block(sf::Vector2f(180, 60));
         case Constants::I:
-            return I_block();
+            return I_block(sf::Vector2f(200, 40));
         case Constants::J:
-            return J_block();
+            return J_block(sf::Vector2f(180, 60));
         case Constants::Z:
-            return Z_block();
+            return Z_block(sf::Vector2f(180, 20));
         case Constants::S:
-            return S_block();
+            return S_block(sf::Vector2f(180, 20));
         default:
             return L_block();
     }
-
 }
 
 std::vector<Constants::Block_types>& Block_bag::get_next_vector() {

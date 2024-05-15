@@ -6,7 +6,7 @@
 #include "O_block.h"
 #include "../Constants.h"
 
-O_block::O_block(){
+O_block::O_block(sf::Vector2f position){
     _type = Constants::Block_types::O;
     _placed = false;
     auto block_color = sf::Color::Yellow;
@@ -17,10 +17,10 @@ O_block::O_block(){
     _r3.setOrigin(sf::Vector2f(40, 0));
     _r4.setOrigin(sf::Vector2f(0, 0));
 
-    _r1.setPosition(sf::Vector2f(200, 40));
-    _r2.setPosition(sf::Vector2f(200, 40));
-    _r3.setPosition(sf::Vector2f(200, 40));
-    _r4.setPosition(sf::Vector2f(200, 40));
+    _r1.setPosition(position);
+    _r2.setPosition(position);
+    _r3.setPosition(position);
+    _r4.setPosition(position);
 
     _r1.setSize(tilesize_f);
     _r2.setSize(tilesize_f);

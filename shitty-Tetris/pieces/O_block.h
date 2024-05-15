@@ -6,11 +6,12 @@
 #define TILEMAP_O_BLOCK_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "Base_shape.h"
 
 class O_block : public Base_shape{
 public:
-    O_block();
+    O_block(sf::Vector2f position = sf::Vector2f(0, 0));
 };
 
 

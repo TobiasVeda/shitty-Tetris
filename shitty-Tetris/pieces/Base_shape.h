@@ -29,6 +29,7 @@ public:
     void place();
     void rotate(float);
     void move(sf::Vector2f);
+    void set_position(sf::Vector2f);
     [[nodiscard]] bool intersects(sf::RectangleShape&) const;
     [[nodiscard]] bool is_placed() const;
     [[nodiscard]] Constants::Block_types get_blocktype() const;
