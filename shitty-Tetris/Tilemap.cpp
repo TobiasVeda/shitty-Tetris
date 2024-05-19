@@ -10,8 +10,8 @@
 
     void Tilemap::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 //        called when window.draw(object)
-        states.texture = &m_tileset; // apply texture
-        target.draw(m_vertices, states); // draw tilemap
+        states.texture = &_tileset; // apply texture
+        target.draw(_vertices, states); // draw tilemap
     }
 
 
@@ -19,12 +19,12 @@
 
 
         // load the tileset texture
-        if (!m_tileset.loadFromFile(Constants::texture_name))
+        if (!_tileset.loadFromFile(Constants::texture_name))
             return false;
 
         // resize the vertex array to fit the level size
-        m_vertices.setPrimitiveType(sf::Quads);
-        m_vertices.resize(Constants::tile_count_x * Constants::tile_count_y * 4);
+        _vertices.setPrimitiveType(sf::Quads);
+        _vertices.resize(Constants::tile_count_x * Constants::tile_count_y * 4);
 //        4. one for each side of a quad. width*height for multiple quads
 
         // populate the vertex array, with one quad per tile
@@ -41,11 +41,11 @@
 
                 // find its position in the tileset texture
                 // gets the entire width of the texture and divides it by the width of a single tile
-                int tu = tileNumber % (m_tileset.getSize().x / Constants::tilesize.x);
-                int tv = tileNumber / (m_tileset.getSize().x / Constants::tilesize.x);
+                int tu = tileNumber % (_tileset.getSize().x / Constants::tilesize.x);
+                int tv = tileNumber / (_tileset.getSize().x / Constants::tilesize.x);
 
                 // get a pointer to the current tile's quad
-                sf::Vertex* quad = &m_vertices[(i + j * Constants::tile_count_x) * 4];
+                sf::Vertex* quad = &_vertices[(i + j * Constants::tile_count_x) * 4];
 
                 // define its 4 corners
                 quad[0].position = sf::Vector2f(i * Constants::tilesize.x, j * Constants::tilesize.y);

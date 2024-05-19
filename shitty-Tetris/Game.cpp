@@ -8,6 +8,8 @@
 #include "Keybinds.h"
 #include <vector>
 
+Game::Game() {};
+
 Game::Game(sf::RenderWindow &window, int player) {
 
     _view.setSize(sf::Vector2f(600, 720));
@@ -267,13 +269,16 @@ void Game::do_gametick_action() {
     if (_is_dead){
         end_game();
     }
-    try_placing_player();
     gravity();
-    try_lineclear();
-    try_levelup();
+    try_placing_player();
+
     if (_player_controlled_block.is_placed()){
-        new_round();
+        add_player_to_collection();
+        try_lineclear();
+        try_levelup();
+        _player_controlled_block = Block_bag::get_new_block();
         try_death();
+        _held_this_turn = false;
     }
 }
 
@@ -308,15 +313,15 @@ void Game::do_action(Keybinds &keybinds) {
 void Game::hold_player(){
     // If first call: The type of player block is stored, and player is given a new block.
     // If not first call: Player type is stored, and player is given a new block with the previous stored type.
-    static bool empty = true;
+    static bool hold_empty = true;
     _held_this_turn = true;
-    if (empty){
-        _held_block = _player_controlled_block.get_blocktype();
+    if (hold_empty){
+        _held_blocktype = _player_controlled_block.get_blocktype();
         _player_controlled_block = Block_bag::get_new_block();
-        empty = false;
+        hold_empty = false;
     } else{
-        Constants::Block_types temp_type = _held_block;
-        _held_block = _player_controlled_block.get_blocktype();
+        Constants::Block_types temp_type = _held_blocktype;
+        _held_blocktype = _player_controlled_block.get_blocktype();
         _player_controlled_block = Block_bag::get_new_block(temp_type);
     }
 }
@@ -406,7 +411,7 @@ void Game::try_lineclear(){
     }
     _score += calculate_clear_points((int)coord_line_cleared.size());
     _lines_cleared += (int)coord_line_cleared.size() * 5;
-    move_line_down(coord_line_cleared);
+    move_lines_down(coord_line_cleared);
 }
 
 
@@ -438,12 +443,15 @@ void Game::clear_row(float y) {
 }
 
 Constants::Block_types Game::get_held_type(){
-    return _held_block;
+    return _held_blocktype;
 }
 
-void Game::move_line_down(std::vector<int> &coord_line_cleared) {
-    // Doesn't always work, yet
+void Game::move_lines_down(std::vector<int> &coord_line_cleared) {
+    // Moves all rectangles in stack that has y coordinate greater than specified.
+    // The y coordinate is the y coordinate of the line that was just cleared. If multiple lines was cleared,
+    // it moves the stack down for each line cleared
 
+    std::reverse(coord_line_cleared.begin(), coord_line_cleared.end());
     sf::Vector2f block_check;
     const auto bottom_left = sf::Vector2f(
             _view.getCenter().x - (_view.getSize().x /2) +1,
@@ -452,14 +460,14 @@ void Game::move_line_down(std::vector<int> &coord_line_cleared) {
 
     for (int z = 0; z < coord_line_cleared.size(); ++z) {
 
-        for (int y = 0; y < Constants::tile_count_y; ++y) {
+
+        for (int y = coord_line_cleared[z]; y < Constants::tile_count_y; ++y) {
 
             for (int x = 0; x < Constants::tile_count_x; ++x) {
                 block_check = sf::Vector2f(
                         bottom_left.x + (x * Constants::tilesize.x),
-                        bottom_left.y - (y * Constants::tilesize.y) - (coord_line_cleared[z] * Constants::tilesize.y)
+                        bottom_left.y - (y * Constants::tilesize.y)
                 );
-
 
                 for (auto& i : _block_stack) {
 

@@ -21,6 +21,7 @@ protected:
     sf::Keyboard::Key _key_drop;
     sf::Keyboard::Key _key_hold;
 public:
+    Keybinds();
     explicit Keybinds(int);
     sf::Keyboard::Key get_keybind(Constants::Actions);
 };

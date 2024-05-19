@@ -7,7 +7,7 @@
 #include "Block_bag.h"
 
 bool UI::construct_text() {
-    bool returtn_value = _font.loadFromFile(Constants::font_name);
+    _font.loadFromFile(Constants::font_name);
 
     _score.setFont(_font);
     _level.setFont(_font);
@@ -59,7 +59,8 @@ bool UI::construct_text() {
     _hold_header.setPosition(470, 100);
     _next_header.setPosition(470, 280);
 
-    return returtn_value;
+//    return return_value;
+    return true;
 }
 
 void UI::construct_container(){
@@ -91,7 +92,7 @@ void UI::construct_container(){
 
 }
 
-UI::UI(){
+void UI::load(){
 
     construct_text();
     construct_container();

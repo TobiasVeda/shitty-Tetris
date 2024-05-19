@@ -6,6 +6,8 @@
 #include <SFML/Graphics.hpp>
 #include "pieces/Base_shape.h"
 
+Keybinds::Keybinds() {};
+
 Keybinds::Keybinds(int player) {
     _player = player;
 

@@ -13,8 +13,8 @@ class Tilemap : public sf::Drawable {
             //allows window.draw(object)
 
 private:
-    sf::VertexArray m_vertices;
-    sf::Texture m_tileset;
+    sf::VertexArray _vertices;
+    sf::Texture _tileset;
 
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
 

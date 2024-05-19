@@ -34,7 +34,7 @@ protected:
     bool construct_text();
     void construct_container();
 public:
-    UI();
+    void load();
     void update(Constants::Block_types, std::vector<int>);
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
 };

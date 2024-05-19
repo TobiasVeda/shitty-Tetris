@@ -6,11 +6,27 @@
 #define SHITTY_TETRIS_PROCESS_H
 
 #include <SFML/Graphics.hpp>
+#include "Game.h"
+#include "Tilemap.h"
+#include "UI.h"
+#include "Keybinds.h"
 
 class Process {
+protected:
+    Game _game;
+    Keybinds _keybinds;
+    Tilemap _tilemap;
+    UI _ui;
+
+    bool _keep_alive;
+
+    int _long_delay;
+
 public:
-    static void game_loop(sf::RenderWindow&, int);
-//    static void gravity_loop();
+    Process(sf::RenderWindow&, int);
+    void game_loop();
+    void draw(sf::RenderWindow&, int);
+
 };
 
 
