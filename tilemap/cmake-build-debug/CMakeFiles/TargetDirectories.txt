@@ -1,3 +1,0 @@
-C:/Users/tobia/shitty-Tetris/tilemap/cmake-build-debug/CMakeFiles/tilemap.dir
-C:/Users/tobia/shitty-Tetris/tilemap/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/tobia/shitty-Tetris/tilemap/cmake-build-debug/CMakeFiles/rebuild_cache.dir
