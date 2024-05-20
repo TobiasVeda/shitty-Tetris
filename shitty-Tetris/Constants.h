@@ -15,7 +15,7 @@ public:
     enum Rotation_direction{Clockwise, Counter_clock};
     enum Actions{Move_down, Move_right, Move_left, Rotate_clockwise, Rotate_counter_clock, Drop, Hold, Nothing};
     enum Block_types{T, O, L, I, J, Z, S, Ndef};
-    enum Game_states{Setup, Run, End};
+    enum Game_states{Startup, Setup, Run, End};
     static inline const std::string texture_name = "tileset.png";
     static inline const std::string font_name = "AgencyFB-Bold.ttf";
     static inline const float rotation_amount = 90;

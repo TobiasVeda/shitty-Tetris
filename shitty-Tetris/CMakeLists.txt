@@ -35,6 +35,8 @@ add_executable(shitty-Tetris main.cpp
         Process.h
         UI.cpp
         UI.h
+        Main_menu.cpp
+        Main_menu.h
 )
 
 target_link_libraries(shitty-Tetris PRIVATE sfml-system sfml-network sfml-graphics sfml-window)

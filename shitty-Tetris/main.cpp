@@ -3,6 +3,7 @@
 #include <thread>
 #include "Constants.h"
 #include <iostream>
+#include "Main_menu.h"
 
 //TODO: Fix include order, add const when what the function recieves shouldnt be edited
 //TODO: Error handling when not finding texture(apply error texture), UI magic numbers
@@ -14,13 +15,18 @@ int main(){
     sf::RenderWindow window;
     window.create(sf::VideoMode(1920, 1080), "shitty Tetris");
     bool window_open = true;
+    bool is_startup = true;
     bool is_setup = true;
     window.setActive(false);
 
-    Process p1(0);
+    auto menu = new Main_menu(window);
+    auto p1 = new Process;
+
 //    Process p2(2);
 
-    std::thread p1_grvty(&Process::gravity_loop, &p1, std::ref(window_open));
+//empty construct
+
+    std::thread p1_grvty(&Process::gravity_loop, p1, std::ref(window_open));
 //    std::thread p2_grvty(&Process::gravity_loop, &p2, std::ref(window_open));
 
     while (window.isOpen()) {
@@ -31,38 +37,62 @@ int main(){
                 window_open = false;
                 window.close();
             }
-            if (event.type == sf::Event::KeyPressed){
-                if (is_setup){
-                    if (p1.set_keybinds(event.key.code)){
-//                    } else if(p2.set_keybinds(event.key.code)){
-                    } else{
-                        is_setup = false;
-                    }
+
+
+
+            if (is_startup){
+                if (event.type == sf::Event::MouseButtonPressed){
+                    is_startup = !menu->test_click(sf::Mouse::getPosition(window));
 
                 } else{
-                    p1.event_handler(event.key.code);
-//                    p2.event_handler(event.key.code);
+                    menu->test_hover(sf::Mouse::getPosition(window));
+                }
+            }
+
+            if (!is_startup){
+
+                static bool first = true;
+                if (first){
+                    p1->init();
+                    first = false;
                 }
 
 
+                if (event.type == sf::Event::KeyPressed){
+                    if (is_setup){
+//                        if 2player
+                        if (p1->set_keybinds(event.key.code)){
+//                        } else if(p2.set_keybinds(event.key.code)){
+                        } else{
+                            is_setup = false;
+                        }
 
+                    } else{
+                        p1->event_handler(event.key.code);
+                        //if 2player
+//                    p2.event_handler(event.key.code);
+                    }
             }
-            if (event.type == sf::Event::JoystickButtonPressed){
-                auto g = event.joystickButton.joystickId;
-                int o= 1;
+
+
             }
         }
 
 
 
         window.clear(sf::Color::White);
-        p1.draw(window);
+        if (is_startup){
+            window.draw(*menu);
+        } else{
+            p1->draw(window);
+            //if 2player
 //        p2.draw(window);
+        }
+
         window.display();
-//        Constants::wait_event_tick();
     }
 
-    p1_grvty.join();
+//    p1_grvty.join();
 //    p2_grvty.join();
 
 }

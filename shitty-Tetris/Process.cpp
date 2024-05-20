@@ -10,8 +10,24 @@
 #include "UI.h"
 #include <thread>
 
-Process::Process(int player) {
-    _player = player;
+Process::~Process(){
+    delete _game;
+
+    delete _tilemap;
+    delete _ui;
+}
+
+void Process::init(bool multiplayer) {
+    static bool p1 = true;
+    if (multiplayer && p1){
+        _player = 1; // duo p1
+        p1 = false;
+    } else if(multiplayer && !p1){
+        _player = 2; // duo p2
+    } else{
+        _player = 0;
+    }
+
     _is_setup = true;
     _keybind_loop = 0;
 
@@ -20,12 +36,6 @@ Process::Process(int player) {
     _ui = new UI();
     _ui->update(_game->get_held_type(), _game->get_scoreboard(), Constants::Setup);
     _tilemap = new Tilemap();
-}
-Process::~Process(){
-    delete _game;
-
-    delete _tilemap;
-    delete _ui;
 }
 
 void Process::gravity_loop(bool &window_open) {

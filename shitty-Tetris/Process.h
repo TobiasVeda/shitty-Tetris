@@ -30,8 +30,9 @@ protected:
 
 
 public:
-    explicit Process(int);
+    Process() = default;
     ~Process();
+    void init(bool multiplayer = false);
     void event_handler(sf::Keyboard::Key);
     void gravity_loop(bool&);
     void draw(sf::RenderWindow&);
