@@ -11,8 +11,20 @@ T_block::T_block(sf::Vector2f position){
     _placed = false;
     auto block_color = sf::Color(141, 50, 168);
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
+    int x = (int)Constants::tilesize.x;
+    int y = (int)Constants::tilesize.y;
 
-//    _sprite.loadFromFile("40frame.png", sf::IntRect(40, 40, 40, 40));
+    if (_texture.loadFromFile(Constants::texture_name, sf::IntRect(x, 0*y, x, y))){
+        _r1.setTexture(&_texture);
+        _r2.setTexture(&_texture);
+        _r3.setTexture(&_texture);
+        _r4.setTexture(&_texture);
+    } else{
+        _r1.setFillColor(block_color);
+        _r2.setFillColor(block_color);
+        _r3.setFillColor(block_color);
+        _r4.setFillColor(block_color);
+    }
 
     _r1.setOrigin(sf::Vector2f(60, 20));
     _r2.setOrigin(sf::Vector2f(20, 20));
@@ -28,9 +40,4 @@ T_block::T_block(sf::Vector2f position){
     _r2.setSize(tilesize_f);
     _r3.setSize(tilesize_f);
     _r4.setSize(tilesize_f);
-
-    _r1.setFillColor(block_color);
-    _r2.setFillColor(block_color);
-    _r3.setFillColor(block_color);
-    _r4.setFillColor(block_color);
 }

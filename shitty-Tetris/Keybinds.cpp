@@ -6,12 +6,10 @@
 #include <SFML/Graphics.hpp>
 #include "pieces/Base_shape.h"
 
-Keybinds::Keybinds() {};
 
-Keybinds::Keybinds(int player) {
-    _player = player;
+void Keybinds::assign_default(int player) {
 
-    if (_player == 0){ //solo game
+    if (player == 0){ //solo game
         _key_down = sf::Keyboard::Key::Down;
         _key_right = sf::Keyboard::Key::Right;
         _key_left = sf::Keyboard::Key::Left;
@@ -19,7 +17,7 @@ Keybinds::Keybinds(int player) {
         _key_counter_clock = sf::Keyboard::Key::Z;
         _key_drop = sf::Keyboard::Key::Space;
         _key_hold = sf::Keyboard::Key::C;
-    } else if (_player == 1){
+    } else if (player == 1){
         _key_down = sf::Keyboard::Key::S;
         _key_right = sf::Keyboard::Key::D;
         _key_left = sf::Keyboard::Key::A;
@@ -27,7 +25,7 @@ Keybinds::Keybinds(int player) {
         _key_counter_clock = sf::Keyboard::Key::Q;
         _key_drop = sf::Keyboard::Key::Tab;
         _key_hold = sf::Keyboard::Key::E;
-    } else if (_player == 2){
+    } else if (player == 2){
         _key_down = sf::Keyboard::Key::Down;
         _key_right = sf::Keyboard::Key::Right;
         _key_left = sf::Keyboard::Key::Left;
@@ -38,22 +36,53 @@ Keybinds::Keybinds(int player) {
     }
 }
 
-sf::Keyboard::Key Keybinds::get_keybind(Constants::Actions action){
+void Keybinds::assign_key(Constants::Actions action, sf::Keyboard::Key keycode) {
 
     switch (action) {
         case Constants::Move_down:
-            return _key_down;
+            _key_down = keycode;
+            break;
         case Constants::Move_right:
-            return _key_right;
+            _key_right = keycode;
+            break;
         case Constants::Move_left:
-            return _key_left;
+            _key_left = keycode;
+            break;
         case Constants::Rotate_clockwise:
-            return _key_clockwise;
+            _key_clockwise = keycode;
+            break;
         case Constants::Rotate_counter_clock:
-            return _key_counter_clock;
+            _key_counter_clock = keycode;
+            break;
         case Constants::Drop:
-            return _key_drop;
+            _key_drop = keycode;
+            break;
         case Constants::Hold:
-            return _key_hold;
+            _key_hold = keycode;
+            break;
+        case Constants::Nothing:
+            break;
     }
+}
+
+Constants::Actions Keybinds::translate_key(sf::Keyboard::Key &key){
+    // Key codes not constant, so switchcase not possible
+
+   if (key == _key_down){
+       return Constants::Move_down;
+   } else if (key == _key_right){
+       return Constants::Move_right;
+   } else if (key == _key_left){
+       return Constants::Move_left;
+   } else if (key == _key_clockwise){
+       return Constants::Rotate_clockwise;
+   } else if (key == _key_counter_clock){
+       return Constants::Rotate_counter_clock;
+   } else if (key == _key_drop){
+       return Constants::Drop;
+   } else if (key == _key_hold){
+       return Constants::Hold;
+   } else{
+       return Constants::Nothing;
+   }
 }

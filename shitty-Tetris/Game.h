@@ -10,11 +10,8 @@
 #include <vector>
 #include "Constants.h"
 #include "Keybinds.h"
-#include <mutex>
 
 class Game : public sf::Drawable{
-public:
-    std::mutex game_mutex;
 protected:
 
     sf::View _view;
@@ -22,7 +19,7 @@ protected:
     sf::RectangleShape _bound_R;
     sf::RectangleShape _bound_D;
 
-    Base_shape _player_controlled_block;
+    Base_shape *_player_controlled_block;
     Constants::Block_types _held_blocktype;
     bool _held_this_turn;
     std::vector<sf::RectangleShape> _block_stack;
@@ -66,12 +63,14 @@ protected:
     bool player_clear_to_rotate_counter_clock(bool auto_commit = false);
 
 public:
-    Game();
-    Game(sf::RenderWindow&, int);
+    Game(int);
+    ~Game();
     Constants::Block_types get_held_type();
     std::vector<int> get_scoreboard();
     void do_gametick_action();
-    void do_action(Keybinds&);
+    void do_action(Constants::Actions);
+    sf::View& get_view();
+    double get_gravity_delay_ms();
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
 };
 

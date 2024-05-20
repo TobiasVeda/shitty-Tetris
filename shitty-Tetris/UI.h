@@ -12,6 +12,8 @@
 
 class UI : public sf::Drawable{
 protected:
+    Constants::Game_states _state;
+
     sf::Font _font;
     sf::Text _score;
     sf::Text _level;
@@ -23,19 +25,27 @@ protected:
     sf::Text _hold_header;
     sf::Text _next_header;
 
-    Base_shape _hold;
-    Base_shape _next1;
-    Base_shape _next2;
-    Base_shape _next3;
+    Base_shape *_hold;
+    Base_shape *_next1;
+    Base_shape *_next2;
+    Base_shape *_next3;
 
     sf::RectangleShape _hold_container;
     sf::RectangleShape _next_container;
 
+    sf::RectangleShape _key_container;
+    sf::Text _key_description;
+    sf::Text _keybinds;
+    std::string _string_keybinds;
+
     bool construct_text();
     void construct_container();
+    std::string keycode_to_string(sf::Keyboard::Key);
 public:
-    void load();
-    void update(Constants::Block_types, std::vector<int>);
+    UI();
+    ~UI();
+    void update(Constants::Block_types, std::vector<int>, Constants::Game_states);
+    void set_key_string(sf::Keyboard::Key);
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
 };
 

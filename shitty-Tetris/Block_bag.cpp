@@ -44,25 +44,27 @@ Constants::Block_types Block_bag::get_new_blocktype_index() {
     return return_value;
 }
 
-Base_shape Block_bag::get_new_block(Constants::Block_types type) {
+Base_shape* Block_bag::get_new_block(Constants::Block_types type) {
+    // If an error occurs in determining block to be returned, function will
+    // return an L. Will also happen if trying to get block og type Ndef
 
     switch (type) {
         case Constants::T:
-            return T_block(sf::Vector2f(180, 20));
+            return new T_block(sf::Vector2f(180, 20));
         case Constants::O:
-            return O_block(sf::Vector2f(200, 40));
+            return new O_block(sf::Vector2f(200, 40));
         case Constants::L:
-            return L_block(sf::Vector2f(180, 60));
+            return new L_block(sf::Vector2f(180, 60));
         case Constants::I:
-            return I_block(sf::Vector2f(200, 40));
+            return new I_block(sf::Vector2f(200, 40));
         case Constants::J:
-            return J_block(sf::Vector2f(180, 60));
+            return new J_block(sf::Vector2f(180, 60));
         case Constants::Z:
-            return Z_block(sf::Vector2f(180, 20));
+            return new Z_block(sf::Vector2f(180, 20));
         case Constants::S:
-            return S_block(sf::Vector2f(180, 20));
+            return new S_block(sf::Vector2f(180, 20));
         default:
-            return L_block();
+            return new L_block(sf::Vector2f(180, 60));
     }
 }
 

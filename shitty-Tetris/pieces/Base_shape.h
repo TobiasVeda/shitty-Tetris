@@ -10,7 +10,7 @@
 #include "../Constants.h"
 
 
-class Base_shape : public sf::Drawable, public sf::Transformable{
+class Base_shape : public sf::Drawable{
 
 protected:
     Constants::Block_types _type;
@@ -20,8 +20,7 @@ protected:
     sf::RectangleShape _r3;
     sf::RectangleShape _r4;
 
-    sf::Transform _transform;
-    sf::Texture _sprite;
+    sf::Texture _texture;
     bool _placed;
 
 public:
@@ -33,6 +32,7 @@ public:
     [[nodiscard]] bool intersects(sf::RectangleShape&) const;
     [[nodiscard]] bool is_placed() const;
     [[nodiscard]] Constants::Block_types get_blocktype() const;
+    virtual bool load();
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
 };
 

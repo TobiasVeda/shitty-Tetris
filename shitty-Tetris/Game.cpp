@@ -8,9 +8,7 @@
 #include "Keybinds.h"
 #include <vector>
 
-Game::Game() {};
-
-Game::Game(sf::RenderWindow &window, int player) {
+Game::Game(int player) {
 
     _view.setSize(sf::Vector2f(600, 720));
     _view.setCenter(sf::Vector2f(300,360));
@@ -22,10 +20,9 @@ Game::Game(sf::RenderWindow &window, int player) {
         _view.setViewport(sf::FloatRect(0.63f, 0.1, 0.36f, 0.75));
     }
 
-    window.setView(_view);
-
     _player_controlled_block = Block_bag::get_new_block();
     _held_this_turn = false;
+    _held_blocktype = Constants::Ndef;
 
     _score = 0;
     _level = 1;
@@ -33,6 +30,10 @@ Game::Game(sf::RenderWindow &window, int player) {
     _is_dead = false;
 
     set_bounds();
+}
+
+Game::~Game() noexcept {
+    delete _player_controlled_block;
 }
 
 void Game::set_bounds() {
@@ -63,14 +64,14 @@ void Game::set_bounds() {
 void Game::add_player_to_collection() {
     // Does not check for duplicates. Should be sure that rectangles added does
     // not overlap with already existing rectangles.
-    for (const auto& i : _player_controlled_block.get_rectangle_list()) {
+    for (const auto& i : _player_controlled_block->get_rectangle_list()) {
         _block_stack.emplace_back(i);
     }
 }
 
 void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 
-    target.draw(_player_controlled_block, states);
+    target.draw(*_player_controlled_block, states);
 
     for (auto& i : _block_stack) {
             target.draw(i, states);
@@ -87,16 +88,16 @@ void Game::move_player(Constants::Directions direction){
 
     if (direction == Constants::Down && next_pos_valid_down){
         auto down = sf::Vector2f(0, (float)Constants::tilesize.y);
-        _player_controlled_block.move(down);
+        _player_controlled_block->move(down);
         _score += calculate_move_points();
     }
     if (direction == Constants::Right && next_pos_valid_right){
         auto right = sf::Vector2f( (float)Constants::tilesize.y, 0);
-        _player_controlled_block.move(right);
+        _player_controlled_block->move(right);
     }
     if (direction == Constants::Left && next_pos_valid_left){
         auto left = sf::Vector2f(-1 * (float)Constants::tilesize.y, 0);
-        _player_controlled_block.move(left);
+        _player_controlled_block->move(left);
     }
 
 }
@@ -119,13 +120,13 @@ bool Game::player_clear_to_move_down(bool auto_commit){
 
     auto down = sf::Vector2f(0, (float)Constants::tilesize.y);
     auto up = sf::Vector2f(-1 * down.x, -1 * down.y);
-    _player_controlled_block.move(down);
+    _player_controlled_block->move(down);
 
     if (player_intersects_with_bounds() || player_intersects_with_stack()){
-        _player_controlled_block.move(up);
+        _player_controlled_block->move(up);
         return false;
     } else if(!auto_commit){
-        _player_controlled_block.move(up);
+        _player_controlled_block->move(up);
         return true;
     }
     return true;
@@ -137,13 +138,13 @@ bool Game::player_clear_to_move_right(bool auto_commit){
 
     auto right = sf::Vector2f((float)Constants::tilesize.x, 0);
     auto left = sf::Vector2f(-1 * right.x, -1 * right.y);
-    _player_controlled_block.move(right);
+    _player_controlled_block->move(right);
 
     if (player_intersects_with_bounds() || player_intersects_with_stack()){
-        _player_controlled_block.move(left);
+        _player_controlled_block->move(left);
         return false;
     } else if(!auto_commit){
-        _player_controlled_block.move(left);
+        _player_controlled_block->move(left);
         return true;
     }
     return true;
@@ -155,13 +156,13 @@ bool Game::player_clear_to_move_left(bool auto_commit){
 
     auto left = sf::Vector2f(-1 * (float)Constants::tilesize.x, 0);
     auto right = sf::Vector2f(-1 * left.x, -1 * left.y);
-    _player_controlled_block.move(left);
+    _player_controlled_block->move(left);
 
     if (player_intersects_with_bounds() || player_intersects_with_stack()){
-        _player_controlled_block.move(right);
+        _player_controlled_block->move(right);
         return false;
     } else if(!auto_commit){
-        _player_controlled_block.move(right);
+        _player_controlled_block->move(right);
         return true;
     }
     return true;
@@ -174,13 +175,13 @@ bool Game::player_clear_to_rotate_clockwise(bool auto_commit){
 
     float clockwise = Constants::rotation_amount;
     float counter_clock = -1 * clockwise;
-    _player_controlled_block.rotate(clockwise);
+    _player_controlled_block->rotate(clockwise);
 
     if (player_intersects_with_bounds() || player_intersects_with_stack()){
-        _player_controlled_block.rotate(counter_clock);
+        _player_controlled_block->rotate(counter_clock);
         return false;
     } else if(!auto_commit){
-        _player_controlled_block.rotate(counter_clock);
+        _player_controlled_block->rotate(counter_clock);
         return true;
     }
     return true;
@@ -193,13 +194,13 @@ bool Game::player_clear_to_rotate_counter_clock(bool auto_commit){
 
     float counter_clock = -1 * Constants::rotation_amount;
     float clockwise = -1 * counter_clock;
-    _player_controlled_block.rotate(counter_clock);
+    _player_controlled_block->rotate(counter_clock);
 
     if (player_intersects_with_bounds() || player_intersects_with_stack()){
-        _player_controlled_block.rotate(clockwise);
+        _player_controlled_block->rotate(clockwise);
         return false;
     } else if(!auto_commit){
-        _player_controlled_block.rotate(clockwise);
+        _player_controlled_block->rotate(clockwise);
         return true;
     }
     return true;
@@ -207,9 +208,9 @@ bool Game::player_clear_to_rotate_counter_clock(bool auto_commit){
 
 
 bool Game::player_intersects_with_bounds() {
-    bool down = _player_controlled_block.intersects(_bound_D);
-    bool right = _player_controlled_block.intersects(_bound_R);
-    bool left = _player_controlled_block.intersects(_bound_L);
+    bool down = _player_controlled_block->intersects(_bound_D);
+    bool right = _player_controlled_block->intersects(_bound_R);
+    bool left = _player_controlled_block->intersects(_bound_L);
 
     if (down || right || left){
         return true;
@@ -220,7 +221,7 @@ bool Game::player_intersects_with_bounds() {
 
 bool Game::player_intersects_with_stack(){
     for (auto& stack_rectangle : _block_stack) {
-        if (_player_controlled_block.intersects(stack_rectangle)){
+        if (_player_controlled_block->intersects(stack_rectangle)){
             return true;
         }
     }
@@ -240,7 +241,7 @@ void Game::drop_player(){
             _score += calculate_drop_points();
         }
     }
-    _player_controlled_block.place();
+    _player_controlled_block->place();
 }
 
 
@@ -248,7 +249,7 @@ void Game::drop_player(){
 void Game::try_placing_player(){
     bool can_move = player_clear_to_move_down();
     if (!can_move){
-        _player_controlled_block.place();
+        _player_controlled_block->place();
     }
 }
 
@@ -259,69 +260,69 @@ void Game::try_death(){
 }
 void Game::new_round(){
     add_player_to_collection();
+    try_lineclear();
+    try_levelup();
     _player_controlled_block = Block_bag::get_new_block();
+    try_death();
     _held_this_turn = false;
 }
 void Game::end_game(){
-    exit(0);
+    exit(9);
 }
 void Game::do_gametick_action() {
+    // Test if placed first to allow block to move when it hits bottom.
+
     if (_is_dead){
         end_game();
     }
+    if (_player_controlled_block->is_placed()){
+        new_round();
+    }
     gravity();
     try_placing_player();
-
-    if (_player_controlled_block.is_placed()){
-        add_player_to_collection();
-        try_lineclear();
-        try_levelup();
-        _player_controlled_block = Block_bag::get_new_block();
-        try_death();
-        _held_this_turn = false;
-    }
 }
 
-void Game::do_action(Keybinds &keybinds) {
+void Game::do_action(Constants::Actions action) {
 
-    if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Move_down))){
-        move_player(Constants::Directions::Down);
+    switch (action) {
+        case Constants::Move_down:
+            move_player(Constants::Directions::Down);
+            break;
+        case Constants::Move_right:
+            move_player(Constants::Directions::Right);
+            break;
+        case Constants::Move_left:
+            move_player(Constants::Directions::Left);
+            break;
+        case Constants::Rotate_clockwise:
+            rotate_player(Constants::Rotation_direction::Clockwise);
+            break;
+        case Constants::Rotate_counter_clock:
+            rotate_player(Constants::Rotation_direction::Counter_clock);
+            break;
+        case Constants::Drop:
+            drop_player();
+            break;
+        case Constants::Hold:
+            if (!_held_this_turn){
+                hold_player();
+            }
+            break;
+        case Constants::Nothing:
+            break;
     }
-    if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Move_right))){
-        move_player(Constants::Directions::Right);
-    }
-    if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Move_left))){
-        move_player(Constants::Directions::Left);
-    }
-    if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Rotate_clockwise))){
-        rotate_player(Constants::Rotation_direction::Clockwise);
-    }
-    else if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Rotate_counter_clock))) {
-        rotate_player(Constants::Rotation_direction::Counter_clock);
-    }
-    if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Drop))) {
-        drop_player();
-    }
-    if (sf::Keyboard::isKeyPressed(keybinds.get_keybind(Constants::Actions::Hold))) {
-        if (!_held_this_turn){
-            hold_player();
-        }
-    }
-
 }
 
 void Game::hold_player(){
     // If first call: The type of player block is stored, and player is given a new block.
     // If not first call: Player type is stored, and player is given a new block with the previous stored type.
-    static bool hold_empty = true;
     _held_this_turn = true;
-    if (hold_empty){
-        _held_blocktype = _player_controlled_block.get_blocktype();
+    if (_held_blocktype == Constants::Ndef){
+        _held_blocktype = _player_controlled_block->get_blocktype();
         _player_controlled_block = Block_bag::get_new_block();
-        hold_empty = false;
     } else{
         Constants::Block_types temp_type = _held_blocktype;
-        _held_blocktype = _player_controlled_block.get_blocktype();
+        _held_blocktype = _player_controlled_block->get_blocktype();
         _player_controlled_block = Block_bag::get_new_block(temp_type);
     }
 }
@@ -410,7 +411,7 @@ void Game::try_lineclear(){
 
     }
     _score += calculate_clear_points((int)coord_line_cleared.size());
-    _lines_cleared += (int)coord_line_cleared.size() * 5;
+    _lines_cleared += (int)coord_line_cleared.size();
     move_lines_down(coord_line_cleared);
 }
 
@@ -480,4 +481,14 @@ void Game::move_lines_down(std::vector<int> &coord_line_cleared) {
         }
     }
 
+}
+
+double Game::get_gravity_delay_ms() {
+    // https://harddrop.com/wiki/Tetris_Worlds#Gravity
+    double delay_s = pow((0.8-((_level-1)*0.007)), (double)(_level-1));
+    return delay_s * 1000;
+}
+
+sf::View& Game::get_view() {
+    return _view;
 }

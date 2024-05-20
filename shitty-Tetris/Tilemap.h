@@ -19,9 +19,7 @@ private:
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
 
 public:
-//    Tilemap();
-
-    bool load();
+    Tilemap();
     void apply_error_texture();
 };
 

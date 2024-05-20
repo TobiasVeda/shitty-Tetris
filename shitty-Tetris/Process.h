@@ -10,22 +10,32 @@
 #include "Tilemap.h"
 #include "UI.h"
 #include "Keybinds.h"
+#include <mutex>
 
-class Process {
+class Process{
 protected:
-    Game _game;
-    Keybinds _keybinds;
-    Tilemap _tilemap;
-    UI _ui;
+    std::mutex _process_mutex;
 
-    bool _keep_alive;
+    int _player;
 
-    int _long_delay;
+    Game *_game;
+    Keybinds *_keybinds;
+    Tilemap *_tilemap;
+    UI *_ui;
+
+    bool _is_setup;
+
+    int _keybind_loop;
+
+
 
 public:
-    Process(sf::RenderWindow&, int);
-    void game_loop();
-    void draw(sf::RenderWindow&, int);
+    explicit Process(int);
+    ~Process();
+    void event_handler(sf::Keyboard::Key);
+    void gravity_loop(bool&);
+    void draw(sf::RenderWindow&);
+    bool set_keybinds(sf::Keyboard::Key);
 
 };
 

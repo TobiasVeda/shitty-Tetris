@@ -56,15 +56,20 @@ Constants::Block_types Base_shape::get_blocktype() const{
 }
 
 void Base_shape::draw(sf::RenderTarget& target, sf::RenderStates states) const{
-        states.texture = &_sprite;
+
+        states.texture = &_texture;
         target.draw(_r1, states);
 
-        states.texture = &_sprite;
+        states.texture = &_texture;
         target.draw(_r2, states);
 
-        states.texture = &_sprite;
+        states.texture = &_texture;
         target.draw(_r3, states);
 
-        states.texture = &_sprite;
+        states.texture = &_texture;
         target.draw(_r4, states);
+}
+
+bool Base_shape::load() {
+    return true;
 }

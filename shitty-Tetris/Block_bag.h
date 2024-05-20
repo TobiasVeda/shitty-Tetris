@@ -18,7 +18,7 @@ protected:
     static Constants::Block_types get_block_from_bag();
     static Constants::Block_types get_new_blocktype_index();
 public:
-    static Base_shape get_new_block(Constants::Block_types type = get_new_blocktype_index());
+    static Base_shape* get_new_block(Constants::Block_types type = get_new_blocktype_index());
     static std::vector<Constants::Block_types>& get_next_vector();
 };
 

@@ -11,8 +11,6 @@
 
 class Keybinds {
 protected:
-    int _player;
-
     sf::Keyboard::Key _key_down;
     sf::Keyboard::Key _key_right;
     sf::Keyboard::Key _key_left;
@@ -21,9 +19,9 @@ protected:
     sf::Keyboard::Key _key_drop;
     sf::Keyboard::Key _key_hold;
 public:
-    Keybinds();
-    explicit Keybinds(int);
-    sf::Keyboard::Key get_keybind(Constants::Actions);
+    void assign_key(Constants::Actions, sf::Keyboard::Key);
+    void assign_default(int);
+    Constants::Actions translate_key(sf::Keyboard::Key&);
 };
 
 
