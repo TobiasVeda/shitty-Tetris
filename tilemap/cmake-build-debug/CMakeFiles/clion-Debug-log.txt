@@ -1,5 +1,0 @@
-"C:\Program Files\JetBrains\CLion 2023.3.4\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2023.3.4/bin/ninja/win/x64/ninja.exe" -DCMAKE_TOOLCHAIN_FILE=C:\Users\tobia\.vcpkg-clion\vcpkg\scripts\buildsystems\vcpkg.cmake -G Ninja -S C:\Users\tobia\shitty-Tetris\tilemap -B C:\Users\tobia\shitty-Tetris\tilemap\cmake-build-debug
--- Found SFML 2.6.1 in C:/Users/tobia/.vcpkg-clion/vcpkg/installed/x64-windows/share/sfml
--- Configuring done (0.8s)
--- Generating done (0.0s)
--- Build files have been written to: C:/Users/tobia/shitty-Tetris/tilemap/cmake-build-debug
