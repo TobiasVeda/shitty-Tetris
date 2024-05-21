@@ -1,8 +1,8 @@
 //
 // Created by tobia on 20.04.2024.
 //
-#include <SFML/Graphics.hpp>
 #include "Base_shape.h"
+#include <SFML/Graphics.hpp>
 #include <list>
 
 std::list<sf::RectangleShape> Base_shape::get_rectangle_list() {

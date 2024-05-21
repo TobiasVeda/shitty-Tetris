@@ -5,11 +5,11 @@
 #ifndef SHITTY_TETRIS_PROCESS_H
 #define SHITTY_TETRIS_PROCESS_H
 
-#include <SFML/Graphics.hpp>
 #include "Game.h"
 #include "Tilemap.h"
 #include "UI.h"
 #include "Keybinds.h"
+#include <SFML/Graphics.hpp>
 #include <mutex>
 
 class Process{

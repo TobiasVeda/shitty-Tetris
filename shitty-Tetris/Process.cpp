@@ -8,6 +8,7 @@
 #include "Game.h"
 #include "Keybinds.h"
 #include "UI.h"
+#include <SFML/Graphics.hpp>
 #include <thread>
 
 Process::~Process(){

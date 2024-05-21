@@ -5,7 +5,7 @@
 #include "UI.h"
 #include "Constants.h"
 #include "Block_bag.h"
-
+#include <SFML/Graphics.hpp>
 
 UI::UI(){
     _state = Constants::Setup;

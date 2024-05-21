@@ -3,8 +3,8 @@
 //
 
 #include "Keybinds.h"
-#include <SFML/Graphics.hpp>
 #include "pieces/Base_shape.h"
+#include <SFML/Graphics.hpp>
 
 
 void Keybinds::assign_default(int player) {

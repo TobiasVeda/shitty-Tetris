@@ -5,8 +5,8 @@
 #ifndef SHITTY_TETRIS_MAIN_MENU_H
 #define SHITTY_TETRIS_MAIN_MENU_H
 
-#include <SFML/Graphics.hpp>
 #include "Constants.h"
+#include <SFML/Graphics.hpp>
 
 class Main_menu : public sf::Drawable{
 protected:

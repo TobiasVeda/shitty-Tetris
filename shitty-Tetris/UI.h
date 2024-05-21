@@ -5,9 +5,9 @@
 #ifndef SHITTY_TETRIS_UI_H
 #define SHITTY_TETRIS_UI_H
 
-#include <SFML/Graphics.hpp>
 #include "pieces/Base_shape.h"
 #include "Constants.h"
+#include <SFML/Graphics.hpp>
 #include <vector>
 
 class UI : public sf::Drawable{

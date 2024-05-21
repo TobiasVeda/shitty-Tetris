@@ -3,9 +3,10 @@
 //
 
 #include "Game.h"
-#include "Constants.h"
 #include "Block_bag.h"
 #include "Keybinds.h"
+#include "Constants.h"
+#include <SFML/Graphics.hpp>
 #include <vector>
 
 Game::Game(int player) {

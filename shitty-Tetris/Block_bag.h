@@ -5,9 +5,9 @@
 #ifndef TILEMAP_BLOCK_BAG_H
 #define TILEMAP_BLOCK_BAG_H
 
-#include <SFML/Graphics.hpp>
-#include "Constants.h"
 #include "pieces/Base_shape.h"
+#include "Constants.h"
+#include <SFML/Graphics.hpp>
 #include <vector>
 
 class Block_bag {

@@ -1,9 +1,9 @@
-#include <SFML/Graphics.hpp>
-#include "Process.h"
-#include <thread>
-#include "Constants.h"
-#include <iostream>
 #include "Main_menu.h"
+#include "Process.h"
+#include "Constants.h"
+#include <SFML/Graphics.hpp>
+#include <thread>
+#include <iostream>
 
 //TODO: Fix include order, add const when what the function recieves shouldnt be edited
 //TODO: Error handling when not finding texture(apply error texture), UI magic numbers

@@ -2,9 +2,9 @@
 // Created by tobia on 20.05.2024.
 //
 
-#include <SFML/Graphics.hpp>
 #include "Main_menu.h"
 #include "Constants.h"
+#include <SFML/Graphics.hpp>
 
 Main_menu::Main_menu(sf::RenderWindow &window){
     _view.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));

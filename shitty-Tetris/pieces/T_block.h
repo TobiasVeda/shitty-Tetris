@@ -5,8 +5,8 @@
 #ifndef TILEMAP_T_BLOCK_H
 #define TILEMAP_T_BLOCK_H
 
-#include <SFML/Graphics.hpp>
 #include "Base_shape.h"
+#include <SFML/Graphics.hpp>
 
 class T_block : public Base_shape{
 public:

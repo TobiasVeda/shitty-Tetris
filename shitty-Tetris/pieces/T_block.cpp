@@ -2,9 +2,9 @@
 // Created by tobia on 20.04.2024.
 //
 
-#include <SFML/Graphics.hpp>
 #include "T_block.h"
 #include "../Constants.h"
+#include <SFML/Graphics.hpp>
 
 T_block::T_block(sf::Vector2f position){
     _type = Constants::Block_types::T;

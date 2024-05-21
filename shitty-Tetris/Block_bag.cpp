@@ -2,11 +2,10 @@
 // Created by tobia on 23.04.2024.
 //
 #include "Block_bag.h"
-#include <SFML/Graphics.hpp>
 #include "pieces/Base_shape.h"
 #include "pieces/all_pieces.h"
+#include <SFML/Graphics.hpp>
 #include <random>
-#include "Game.h"
 
 Constants::Block_types Block_bag::get_block_from_bag(){
     // Start with a full bag, and randomly removes one block for each call.

@@ -5,10 +5,9 @@
 #ifndef TILEMAP_BASE_SHAPE_H
 #define TILEMAP_BASE_SHAPE_H
 
+#include "../Constants.h"
 #include <SFML/Graphics.hpp>
 #include <list>
-#include "../Constants.h"
-
 
 class Base_shape : public sf::Drawable{
 

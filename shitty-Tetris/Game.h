@@ -6,10 +6,10 @@
 #define SHITTY_TETRIS_GAME_H
 
 #include "pieces/Base_shape.h"
+#include "Keybinds.h"
+#include "Constants.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "Constants.h"
-#include "Keybinds.h"
 
 class Game : public sf::Drawable{
 protected:

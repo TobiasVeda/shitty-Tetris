@@ -2,9 +2,9 @@
 // Created by tobia on 28.04.2024.
 //
 
-#include <SFML/Graphics.hpp>
 #include "Z_block.h"
 #include "../Constants.h"
+#include <SFML/Graphics.hpp>
 
 Z_block::Z_block(sf::Vector2f position){
     _type = Constants::Block_types::Z;

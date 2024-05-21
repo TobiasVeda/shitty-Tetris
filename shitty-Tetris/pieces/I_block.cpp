@@ -2,9 +2,9 @@
 // Created by tobia on 28.04.2024.
 //
 
-#include <SFML/Graphics.hpp>
 #include "I_block.h"
 #include "../Constants.h"
+#include <SFML/Graphics.hpp>
 
 I_block::I_block(sf::Vector2f position){
     _type = Constants::Block_types::I;
