@@ -266,20 +266,21 @@ void Game::new_round(){
     try_death();
     _held_this_turn = false;
 }
-void Game::end_game(){
-    exit(9);
-}
+
 void Game::do_gametick_action() {
     // Test if placed first to allow block to move when it hits bottom.
 
-    if (_is_dead){
-        end_game();
-    }
-    if (_player_controlled_block->is_placed()){
+if(!_is_dead){
+    if (_player_controlled_block->is_placed()) {
         new_round();
     }
     gravity();
     try_placing_player();
+}
+}
+
+bool Game::is_dead() {
+    return _is_dead;
 }
 
 void Game::do_action(Constants::Actions action) {

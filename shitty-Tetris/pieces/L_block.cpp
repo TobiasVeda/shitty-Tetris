@@ -28,8 +28,8 @@ L_block::L_block(sf::Vector2f position){
 
     _r1.setOrigin(sf::Vector2f(60, 20));
     _r2.setOrigin(sf::Vector2f(20, 20));
-    _r3.setOrigin(sf::Vector2f(-19, 20));
-    _r4.setOrigin(sf::Vector2f(-19, 60));
+    _r3.setOrigin(sf::Vector2f(-20, 20));
+    _r4.setOrigin(sf::Vector2f(-20, 60));
 
     _r1.setPosition(position);
     _r2.setPosition(position);

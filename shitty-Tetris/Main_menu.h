@@ -20,12 +20,14 @@ protected:
     sf::Text _solo_text;
     sf::Text _duo_text;
 
-    void construct_container(sf::RenderWindow&);
-    void construct_text(sf::RenderWindow&);
+    sf::Texture _title_texture;
+
+    void construct_container();
+    void construct_text();
 public:
     Main_menu(sf::RenderWindow&);
     void test_hover(sf::Vector2i);
-    bool test_click(sf::Vector2i);
+    int test_click(sf::Vector2i);
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
 };
 

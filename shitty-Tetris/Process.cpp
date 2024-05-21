@@ -12,7 +12,7 @@
 
 Process::~Process(){
     delete _game;
-
+    delete _keybinds;
     delete _tilemap;
     delete _ui;
 }
@@ -44,8 +44,15 @@ void Process::gravity_loop(bool &window_open) {
     while (window_open) {
         _process_mutex.lock();
 
-        _game->do_gametick_action();
-        _ui->update(_game->get_held_type(), _game->get_scoreboard(), Constants::Run);
+        _is_dead = _game->is_dead();
+
+        if (_is_dead){
+            _ui->update(_game->get_held_type(), _game->get_scoreboard(), Constants::End);
+        } else{
+            _game->do_gametick_action();
+            _ui->update(_game->get_held_type(), _game->get_scoreboard(), Constants::Run);
+        }
+
 
         _process_mutex.unlock();
 
@@ -57,8 +64,10 @@ void Process::gravity_loop(bool &window_open) {
 void Process::event_handler(sf::Keyboard::Key key){
     _process_mutex.lock();
 
-    _game->do_action(_keybinds->translate_key(key));
-    _ui->update(_game->get_held_type(), _game->get_scoreboard(), Constants::Run);
+    if(!_is_dead) {
+        _game->do_action(_keybinds->translate_key(key));
+        _ui->update(_game->get_held_type(), _game->get_scoreboard(), Constants::Run);
+    }
 
     _process_mutex.unlock();
 }

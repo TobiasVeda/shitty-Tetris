@@ -7,15 +7,18 @@
 #include "Constants.h"
 
 Main_menu::Main_menu(sf::RenderWindow &window){
-    construct_container(window);
-    construct_text(window);
-
-}
-
-void Main_menu::construct_container(sf::RenderWindow &window) {
     _view.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
     _view.setCenter(window.getSize().x /2, window.getSize().y /2);
     window.setView(_view);
+
+    _title_texture.loadFromFile(Constants::title_texture);
+
+    construct_container();
+    construct_text();
+
+}
+
+void Main_menu::construct_container() {
 
     _menu_container.setSize(_view.getSize());
     _menu_container.setPosition(0, 0);
@@ -26,7 +29,7 @@ void Main_menu::construct_container(sf::RenderWindow &window) {
             (_view.getSize().x /2) - (_title.getSize().x /2),
             Constants::tilesize.y * 3
     );
-    _title.setFillColor(sf::Color::Magenta);
+    _title.setTexture(&_title_texture);
 
     int center_offset = Constants::tilesize.x * 8;
 
@@ -45,7 +48,7 @@ void Main_menu::construct_container(sf::RenderWindow &window) {
     _duo_container.setFillColor(sf::Color::Cyan);
 }
 
-void Main_menu::construct_text(sf::RenderWindow &window) {
+void Main_menu::construct_text() {
     _font.loadFromFile(Constants::font_name);
 
     _solo_text.setCharacterSize(50);
@@ -85,21 +88,17 @@ void Main_menu::test_hover(sf::Vector2i mouse) {
     }
 }
 
-bool Main_menu::test_click(sf::Vector2i mouse){
+int Main_menu::test_click(sf::Vector2i mouse){
     if (_solo_container.getGlobalBounds().contains((float)mouse.x, (float)mouse.y)){
         _solo_container.setFillColor(sf::Color::Red);
         _solo_text.setFillColor(sf::Color::Cyan);
-        return true;
+        return 1;
     } else if(_duo_container.getGlobalBounds().contains((float)mouse.x, (float)mouse.y)){
         _duo_container.setFillColor(sf::Color::Red);
         _duo_text.setFillColor(sf::Color::Cyan);
-        return true;
+        return 2;
     } else{
-        _solo_container.setFillColor(sf::Color::Yellow);
-        _solo_text.setFillColor(sf::Color::White);
-        _duo_container.setFillColor(sf::Color::Yellow);
-        _duo_text.setFillColor(sf::Color::White);
-        return false;
+        return -1;
     }
 }
 

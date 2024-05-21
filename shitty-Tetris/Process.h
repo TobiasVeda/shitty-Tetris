@@ -27,7 +27,7 @@ protected:
 
     int _keybind_loop;
 
-
+    bool _is_dead;
 
 public:
     Process() = default;

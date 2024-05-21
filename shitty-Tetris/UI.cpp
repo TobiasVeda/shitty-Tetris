@@ -32,6 +32,8 @@ bool UI::construct_text() {
     _hold_header.setFont(_font);
     _next_header.setFont(_font);
 
+    _game_over.setFont(_font);
+
     _score.setString("SCORE:");
     _level.setString("LEVEL:");
     _lines.setString("LINES:");
@@ -41,6 +43,8 @@ bool UI::construct_text() {
 
     _hold_header.setString("HOLD");
     _next_header.setString("NEXT");
+
+    _game_over.setString("GAME OVER");
 
     _score.setCharacterSize(30);
     _level.setCharacterSize(30);
@@ -52,6 +56,8 @@ bool UI::construct_text() {
     _hold_header.setCharacterSize(30);
     _next_header.setCharacterSize(30);
 
+    _game_over.setCharacterSize(45);
+
     _score.setFillColor(sf::Color::Black);
     _level.setFillColor(sf::Color::Black);
     _lines.setFillColor(sf::Color::Black);
@@ -61,6 +67,8 @@ bool UI::construct_text() {
 
     _hold_header.setFillColor(sf::Color::Black);
     _next_header.setFillColor(sf::Color::Black);
+
+    _game_over.setFillColor(sf::Color::Black);
 
     _score.setPosition(405, 0);
     _level.setPosition(405, 30);
@@ -72,6 +80,7 @@ bool UI::construct_text() {
     _hold_header.setPosition(470, 100);
     _next_header.setPosition(470, 280);
 
+    _game_over.setPosition(140, 100);
 
     _key_description.setFont(_font);
     _keybinds.setFont(_font);
@@ -120,9 +129,9 @@ void UI::construct_container(){
 
 
 
-    _key_container.setSize(sf::Vector2f(600, 720));
-    _key_container.setPosition(0, 0);
-    _key_container.setFillColor(sf::Color(150, 150, 150, 240));
+    _greyout.setSize(sf::Vector2f(600, 720));
+    _greyout.setPosition(0, 0);
+    _greyout.setFillColor(sf::Color(150, 150, 150, 240));
 
 }
 
@@ -147,6 +156,23 @@ void UI::update(Constants::Block_types hold_type, std::vector<int> scoreboard, C
     _n_score.setString(std::to_string(scoreboard[0]));
     _n_level.setString(std::to_string(scoreboard[1]));
     _n_lines.setString(std::to_string(scoreboard[2]));
+
+    if (_state == Constants::End){
+        _score.setCharacterSize(40);
+        _level.setCharacterSize(40);
+        _lines.setCharacterSize(40);
+        _n_score.setCharacterSize(40);
+        _n_level.setCharacterSize(40);
+        _n_lines.setCharacterSize(40);
+
+        _score.setPosition(160, 220);
+        _level.setPosition(160, 270);
+        _lines.setPosition(160, 320);
+        _n_score.setPosition(280, 220);
+        _n_level.setPosition(280, 270);
+        _n_lines.setPosition(280, 320);
+    }
+
 }
 
 void UI::set_key_string(sf::Keyboard::Key key) {
@@ -158,14 +184,19 @@ void UI::set_key_string(sf::Keyboard::Key key) {
 
 void UI::draw(sf::RenderTarget &target, sf::RenderStates states) const{
 
+
+
     target.draw(_hold_container, states);
     target.draw(_next_container, states);
-    target.draw(_score, states);
-    target.draw(_level, states);
-    target.draw(_lines, states);
-    target.draw(_n_score, states);
-    target.draw(_n_level, states);
-    target.draw(_n_lines, states);
+    if (_state != Constants::End) {
+        // Prevents double draw on death
+        target.draw(_score, states);
+        target.draw(_level, states);
+        target.draw(_lines, states);
+        target.draw(_n_score, states);
+        target.draw(_n_level, states);
+        target.draw(_n_lines, states);
+    }
     target.draw(_hold_header, states);
     target.draw(_next_header, states);
     if (_hold != nullptr){
@@ -176,9 +207,18 @@ void UI::draw(sf::RenderTarget &target, sf::RenderStates states) const{
     target.draw(*_next3, states);
 
     if (_state == Constants::Setup){
-        target.draw(_key_container, states);
+        target.draw(_greyout, states);
         target.draw(_key_description, states);
         target.draw(_keybinds, states);
+    } else if (_state == Constants::End){
+        target.draw(_greyout, states);
+        target.draw(_game_over, states);
+        target.draw(_score, states);
+        target.draw(_level, states);
+        target.draw(_lines, states);
+        target.draw(_n_score, states);
+        target.draw(_n_level, states);
+        target.draw(_n_lines, states);
     }
 }
 

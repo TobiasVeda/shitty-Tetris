@@ -46,7 +46,6 @@ protected:
     void add_player_to_collection();
     void new_round();
     void try_death();
-    void end_game();
 
     void try_levelup();
     int calculate_clear_points(int);
@@ -71,6 +70,7 @@ public:
     void do_action(Constants::Actions);
     sf::View& get_view();
     double get_gravity_delay_ms();
+    bool is_dead();
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
 };
 

@@ -30,7 +30,7 @@ I_block::I_block(sf::Vector2f position){
     _r1.setOrigin(sf::Vector2f(80, 40));
     _r2.setOrigin(sf::Vector2f(40, 40));
     _r3.setOrigin(sf::Vector2f(0, 40));
-    _r4.setOrigin(sf::Vector2f(-39, 40));
+    _r4.setOrigin(sf::Vector2f(-40, 40));
 
     _r1.setPosition(position);
     _r2.setPosition(position);

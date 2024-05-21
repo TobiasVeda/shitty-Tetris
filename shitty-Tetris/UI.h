@@ -33,10 +33,12 @@ protected:
     sf::RectangleShape _hold_container;
     sf::RectangleShape _next_container;
 
-    sf::RectangleShape _key_container;
+    sf::RectangleShape _greyout;
     sf::Text _key_description;
     sf::Text _keybinds;
     std::string _string_keybinds;
+
+    sf::Text _game_over;
 
     bool construct_text();
     void construct_container();
