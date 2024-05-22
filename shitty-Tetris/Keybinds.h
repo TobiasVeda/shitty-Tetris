@@ -11,6 +11,9 @@
 
 class Keybinds {
 protected:
+    unsigned int _joystick_id;
+    bool _using_gamepad = false;
+
     sf::Keyboard::Key _key_down;
     sf::Keyboard::Key _key_right;
     sf::Keyboard::Key _key_left;
@@ -19,9 +22,15 @@ protected:
     sf::Keyboard::Key _key_drop;
     sf::Keyboard::Key _key_hold;
 public:
-    void assign_key(Constants::Actions, sf::Keyboard::Key);
     void assign_default(int);
-    Constants::Actions translate_key(sf::Keyboard::Key&);
+    void assign_key(Constants::Actions, sf::Keyboard::Key);
+    void assign_joystick(unsigned int);
+
+    [[nodiscard]] Constants::Actions translate_key(sf::Keyboard::Key&) const;
+    [[nodiscard]] Constants::Actions translate_joystick_button(unsigned int, unsigned int) const;
+    [[nodiscard]] Constants::Actions translate_joystick_move(unsigned int, float, float) const;
+
+    [[nodiscard]] bool joystick_centered(unsigned int, float, float) const;
 };
 
 

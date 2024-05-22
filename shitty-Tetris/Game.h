@@ -15,6 +15,11 @@ class Game : public sf::Drawable{
 protected:
 
     sf::View _view;
+    float _pos_x_view;
+    float _pos_y_view;
+    float _basesize_view_x;
+    float _basesize_view_y;
+
     sf::RectangleShape _bound_L;
     sf::RectangleShape _bound_R;
     sf::RectangleShape _bound_D;
@@ -38,7 +43,7 @@ protected:
     void hold_player();
 
     void try_lineclear();
-    bool is_filled(sf::Vector2f&);
+    [[nodiscard]] bool is_filled(sf::Vector2f&);
     void clear_row(float);
     void move_lines_down(std::vector<int>&);
 
@@ -48,12 +53,12 @@ protected:
     void try_death();
 
     void try_levelup();
-    int calculate_clear_points(int);
-    int calculate_move_points();
-    int calculate_drop_points();
+    [[nodiscard]] int calculate_clear_points(int);
+    [[nodiscard]] int calculate_move_points();
+    [[nodiscard]] int calculate_drop_points();
 
-    bool player_intersects_with_stack();
-    bool player_intersects_with_bounds();
+    [[nodiscard]] bool player_intersects_with_stack();
+    [[nodiscard]] bool player_intersects_with_bounds();
 
     bool player_clear_to_move_down(bool auto_commit = false);
     bool player_clear_to_move_right(bool auto_commit = false);
@@ -61,17 +66,23 @@ protected:
     bool player_clear_to_rotate_clockwise(bool auto_commit = false);
     bool player_clear_to_rotate_counter_clock(bool auto_commit = false);
 
-public:
-    Game(int);
-    ~Game();
-    Constants::Block_types get_held_type();
-    std::vector<int> get_scoreboard();
-    void do_gametick_action();
-    void do_action(Constants::Actions);
-    sf::View& get_view();
-    double get_gravity_delay_ms();
-    bool is_dead();
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
+
+public:
+    Game() = default;
+    ~Game();
+    void setup(int);
+
+    void do_action(Constants::Actions);
+    void do_gametick_action();
+
+    void resize(float, float);
+
+    [[nodiscard]] Constants::Block_types get_held_type() const;
+    [[nodiscard]] std::vector<int> get_scoreboard() const;
+    [[nodiscard]] sf::View& get_view();
+    [[nodiscard]] double get_gravity_delay_ms() const;
+    [[nodiscard]] bool is_dead() const;
 };
 
 

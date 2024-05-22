@@ -6,7 +6,6 @@
 #include "pieces/Base_shape.h"
 #include <SFML/Graphics.hpp>
 
-
 void Keybinds::assign_default(int player) {
 
     if (player == 0){ //solo game
@@ -65,8 +64,18 @@ void Keybinds::assign_key(Constants::Actions action, sf::Keyboard::Key keycode) 
     }
 }
 
-Constants::Actions Keybinds::translate_key(sf::Keyboard::Key &key){
+void Keybinds::assign_joystick(unsigned int id) {
+    _joystick_id = id;
+    _using_gamepad = true;
+}
+
+
+Constants::Actions Keybinds::translate_key(sf::Keyboard::Key &key) const{
     // Key codes not constant, so switchcase not possible
+
+    if (_using_gamepad){
+        return Constants::Nothing;
+    }
 
    if (key == _key_down){
        return Constants::Move_down;
@@ -85,4 +94,47 @@ Constants::Actions Keybinds::translate_key(sf::Keyboard::Key &key){
    } else{
        return Constants::Nothing;
    }
+}
+
+Constants::Actions Keybinds::translate_joystick_button(unsigned int id, unsigned int button) const{
+
+    if (!_using_gamepad){
+        return Constants::Nothing;
+    }
+
+    if (id == _joystick_id && button == 2){
+        return Constants::Rotate_clockwise;
+    } else if (id == _joystick_id && button == 3){
+        return Constants::Rotate_counter_clock;
+    } else if (id == _joystick_id && button == 0){
+        return Constants::Hold;
+    } else if (id == _joystick_id && button == 1){
+        return Constants::Drop;
+    } else{
+        return Constants::Nothing;
+    }
+}
+
+Constants::Actions Keybinds::translate_joystick_move(unsigned int id, float x, float y) const{
+
+    if (!_using_gamepad){
+        return Constants::Nothing;
+    }
+
+    if (id == _joystick_id && y > 50){
+        return Constants::Move_down;
+    } else if (id == _joystick_id && x > 50){
+        return Constants::Move_right;
+    } else if (id == _joystick_id && x < -50){
+        return Constants::Move_left;
+    } else{
+        return Constants::Nothing;
+    }
+}
+
+bool Keybinds::joystick_centered(unsigned int id, float x, float y) const{
+    if (_joystick_id == id && (x > -50 && x < 50) && (y > -50 && y < 50)){
+        return true;
+    }
+    return false;
 }

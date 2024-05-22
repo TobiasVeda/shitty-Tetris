@@ -9,8 +9,12 @@
 
 Tilemap::Tilemap() {
     // load the tileset texture
-    _tileset.loadFromFile(Constants::texture_name);
 
+    if (!_tileset.loadFromFile(Constants::texture_name)){
+        if (!_tileset.loadFromFile(Constants::texture_name)){
+            _tileset.create(Constants::tilesize.x, Constants::tilesize.y);
+        }
+    }
 
     // resize the vertex array to fit the level size
     _vertices.setPrimitiveType(sf::Quads);
@@ -51,10 +55,11 @@ Tilemap::Tilemap() {
         }
 }
 
-    void Tilemap::draw(sf::RenderTarget& target, sf::RenderStates states) const{
-//        called when window.draw(object)
-        states.texture = &_tileset; // apply texture
-        target.draw(_vertices, states); // draw tilemap
-    }
+
+void Tilemap::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+    // Called when window.draw(object)
+    states.texture = &_tileset; // apply texture
+    target.draw(_vertices, states); // draw tilemap
+}
 
 

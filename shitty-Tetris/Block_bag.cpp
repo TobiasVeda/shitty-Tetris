@@ -47,6 +47,7 @@ Base_shape* Block_bag::get_new_block(Constants::Block_types type) {
     // If an error occurs in determining block to be returned, function will
     // return an L. Will also happen if trying to get block og type Ndef
 
+
     switch (type) {
         case Constants::T:
             return new T_block(sf::Vector2f(180, 20));

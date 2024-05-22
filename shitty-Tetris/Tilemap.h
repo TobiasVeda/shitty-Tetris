@@ -20,7 +20,6 @@ private:
 
 public:
     Tilemap();
-    void apply_error_texture();
 };
 
 

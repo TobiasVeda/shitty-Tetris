@@ -5,10 +5,32 @@
 #include <SFML/Graphics.hpp>
 #include <list>
 
-std::list<sf::RectangleShape> Base_shape::get_rectangle_list() {
-    return std::list<sf::RectangleShape>{_r1, _r2, _r3, _r4};
-}
+Base_shape::Base_shape() {
+    _placed = false;
+    _type = Constants::Ndef;
 
+    if (!_tileset.loadFromFile(Constants::texture_name)){
+        _tileset.loadFromFile(Constants::texture_name);
+    }
+}
+void Base_shape::set_position(sf::Vector2f position){
+    _r1.setPosition(position);
+    _r2.setPosition(position);
+    _r3.setPosition(position);
+    _r4.setPosition(position);
+}
+void Base_shape::move(sf::Vector2f direction){
+    _r1.move(direction);
+    _r2.move(direction);
+    _r3.move(direction);
+    _r4.move(direction);
+}
+void Base_shape::rotate(float degree){
+    _r1.rotate(degree);
+    _r2.rotate(degree);
+    _r3.rotate(degree);
+    _r4.rotate(degree);
+}
 void Base_shape::place(){
     _placed = true;
 }
@@ -25,35 +47,16 @@ bool Base_shape::intersects(sf::RectangleShape &rectangle) const{
         return false;
     }
 }
-
-void Base_shape::rotate(float degree){
-    _r1.rotate(degree);
-    _r2.rotate(degree);
-    _r3.rotate(degree);
-    _r4.rotate(degree);
-}
-
-void Base_shape::move(sf::Vector2f direction){
-        _r1.move(direction);
-        _r2.move(direction);
-        _r3.move(direction);
-        _r4.move(direction);
-}
-
-void Base_shape::set_position(sf::Vector2f position){
-        _r1.setPosition(position);
-        _r2.setPosition(position);
-        _r3.setPosition(position);
-        _r4.setPosition(position);
-}
-
 bool Base_shape::is_placed() const{
     return _placed;
 }
-
 Constants::Block_types Base_shape::get_blocktype() const{
     return _type;
 }
+std::list<sf::RectangleShape> Base_shape::get_rectangle_list() {
+    return std::list<sf::RectangleShape>{_r1, _r2, _r3, _r4};
+}
+
 
 void Base_shape::draw(sf::RenderTarget& target, sf::RenderStates states) const{
 
@@ -70,6 +73,3 @@ void Base_shape::draw(sf::RenderTarget& target, sf::RenderStates states) const{
         target.draw(_r4, states);
 }
 
-bool Base_shape::load() {
-    return true;
-}

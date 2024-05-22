@@ -15,7 +15,7 @@ I_block::I_block(sf::Vector2f position){
     int x = (int)Constants::tilesize.x;
     int y = (int)Constants::tilesize.y;
 
-    if (_texture.loadFromFile(Constants::texture_name, sf::IntRect(3*x, 0*y, x, y))){
+    if (_texture.loadFromImage(_tileset, sf::IntRect(3*x, 0*y, x, y))){
         _r1.setTexture(&_texture);
         _r2.setTexture(&_texture);
         _r3.setTexture(&_texture);

@@ -22,13 +22,18 @@ protected:
 
     sf::Texture _title_texture;
 
+    sf::Text _cc;
+
     void construct_container();
     void construct_text();
-public:
-    Main_menu(sf::RenderWindow&);
-    void test_hover(sf::Vector2i);
-    int test_click(sf::Vector2i);
+
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
+
+public:
+    explicit Main_menu(sf::RenderWindow&);
+
+    void test_hover(sf::Vector2i);
+    [[nodiscard]] int test_click(sf::Vector2i);
 };
 
 

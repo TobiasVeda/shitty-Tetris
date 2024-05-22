@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.27)
 project(shitty-Tetris)
 
 set(CMAKE_CXX_STANDARD 17)
-find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
+find_package(SFML COMPONENTS system window graphics audio CONFIG REQUIRED)
 
 add_executable(shitty-Tetris main.cpp
         Tilemap.cpp
@@ -37,6 +37,8 @@ add_executable(shitty-Tetris main.cpp
         UI.h
         Main_menu.cpp
         Main_menu.h
+        Audio.cpp
+        Audio.h
 )
 
-target_link_libraries(shitty-Tetris PRIVATE sfml-system sfml-network sfml-graphics sfml-window)
+target_link_libraries(shitty-Tetris PRIVATE sfml-system sfml-network sfml-graphics sfml-window sfml-audio)

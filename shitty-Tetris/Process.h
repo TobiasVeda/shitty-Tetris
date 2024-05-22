@@ -27,17 +27,28 @@ protected:
 
     int _keybind_loop;
 
+    bool _joystick_ready = true;
+    bool _joystick_assigned = false;
+
     bool _is_dead;
 
 public:
-    Process() = default;
+    Process();
     ~Process();
     void init(bool multiplayer = false);
-    void event_handler(sf::Keyboard::Key);
-    void gravity_loop(bool&);
-    void draw(sf::RenderWindow&);
-    bool set_keybinds(sf::Keyboard::Key);
+    void run();
 
+    bool set_keybinds(sf::Keyboard::Key);
+    bool set_joystick(unsigned int);
+
+    void keyboard_event_handler(sf::Keyboard::Key);
+    void joystick_button_handler(unsigned int, unsigned int);
+    void joystick_move_handler(unsigned int, float, float);
+
+    void gravity_loop(bool&);
+
+    void resize(float, float);
+    void display(sf::RenderWindow&);
 };
 
 

@@ -19,6 +19,56 @@ UI::~UI() noexcept {
     delete _next3;
 }
 
+
+void UI::update(Constants::Block_types hold_type, std::vector<int> scoreboard, Constants::Game_states state){
+    _state = state;
+
+    if (hold_type != Constants::Ndef){
+        _hold = Block_bag::get_new_block(hold_type);
+        _hold->set_position(sf::Vector2f(500, 160));
+    } else{
+        _hold = nullptr;
+    }
+    _next1 = Block_bag::get_new_block(Block_bag::get_next_vector()[0]);
+    _next2 = Block_bag::get_new_block(Block_bag::get_next_vector()[1]);
+    _next3 = Block_bag::get_new_block(Block_bag::get_next_vector()[2]);
+
+    _next1->set_position(sf::Vector2f(500, 380));
+    _next2->set_position(sf::Vector2f(500, 500));
+    _next3->set_position(sf::Vector2f(500, 620));
+
+    _n_score.setString(std::to_string(scoreboard[0]));
+    _n_level.setString(std::to_string(scoreboard[1]));
+    _n_lines.setString(std::to_string(scoreboard[2]));
+
+    if (_state == Constants::End){
+        _score.setCharacterSize(40);
+        _level.setCharacterSize(40);
+        _lines.setCharacterSize(40);
+        _n_score.setCharacterSize(40);
+        _n_level.setCharacterSize(40);
+        _n_lines.setCharacterSize(40);
+
+        _score.setPosition(160, 220);
+        _level.setPosition(160, 270);
+        _lines.setPosition(160, 320);
+        _n_score.setPosition(280, 220);
+        _n_level.setPosition(280, 270);
+        _n_lines.setPosition(280, 320);
+    }
+
+}
+
+void UI::set_key_string(sf::Keyboard::Key key) {
+
+    _string_keybinds.append(keycode_to_string(key));
+    _string_keybinds.append("\n");
+    _keybinds.setString(_string_keybinds);
+}
+
+//======================================public=======================================
+//======================================private======================================
+
 bool UI::construct_text() {
     bool return_value = _font.loadFromFile(Constants::font_name);
 
@@ -85,7 +135,8 @@ bool UI::construct_text() {
     _key_description.setFont(_font);
     _keybinds.setFont(_font);
 
-    _key_description.setString("PRESS ENTER FOR DEAFULT KEYBINDS\n\n"
+    _key_description.setString("PRESS ENTER FOR DEAFULT KEYBINDS\n"
+                               "OR USE CONTROLLER\n\n"
                                "MOVE DOWN:\nMOVE RIGHT:\nMOVE LEFT:\nROTATE CLOCKWISE:\nROTATE COUNTER-CLOCK:\n"
                                "DROP BLOCK:\nHOLD BLOCK:");
     _key_description.setCharacterSize(35);
@@ -95,7 +146,7 @@ bool UI::construct_text() {
     _keybinds.setFillColor(sf::Color::Black);
 
     _key_description.setPosition(10, 40);
-    _keybinds.setPosition(320, 125);
+    _keybinds.setPosition(320, 168);
 
     return return_value;
 }
@@ -136,55 +187,7 @@ void UI::construct_container(){
 }
 
 
-void UI::update(Constants::Block_types hold_type, std::vector<int> scoreboard, Constants::Game_states state){
-    _state = state;
-
-    if (hold_type != Constants::Ndef){
-        _hold = Block_bag::get_new_block(hold_type);
-        _hold->set_position(sf::Vector2f(500, 160));
-    } else{
-        _hold = nullptr;
-    }
-    _next1 = Block_bag::get_new_block(Block_bag::get_next_vector()[0]);
-    _next2 = Block_bag::get_new_block(Block_bag::get_next_vector()[1]);
-    _next3 = Block_bag::get_new_block(Block_bag::get_next_vector()[2]);
-
-    _next1->set_position(sf::Vector2f(500, 380));
-    _next2->set_position(sf::Vector2f(500, 500));
-    _next3->set_position(sf::Vector2f(500, 620));
-
-    _n_score.setString(std::to_string(scoreboard[0]));
-    _n_level.setString(std::to_string(scoreboard[1]));
-    _n_lines.setString(std::to_string(scoreboard[2]));
-
-    if (_state == Constants::End){
-        _score.setCharacterSize(40);
-        _level.setCharacterSize(40);
-        _lines.setCharacterSize(40);
-        _n_score.setCharacterSize(40);
-        _n_level.setCharacterSize(40);
-        _n_lines.setCharacterSize(40);
-
-        _score.setPosition(160, 220);
-        _level.setPosition(160, 270);
-        _lines.setPosition(160, 320);
-        _n_score.setPosition(280, 220);
-        _n_level.setPosition(280, 270);
-        _n_lines.setPosition(280, 320);
-    }
-
-}
-
-void UI::set_key_string(sf::Keyboard::Key key) {
-
-    _string_keybinds.append(keycode_to_string(key));
-    _string_keybinds.append("\n");
-    _keybinds.setString(_string_keybinds);
-}
-
 void UI::draw(sf::RenderTarget &target, sf::RenderStates states) const{
-
-
 
     target.draw(_hold_container, states);
     target.draw(_next_container, states);
@@ -222,7 +225,10 @@ void UI::draw(sf::RenderTarget &target, sf::RenderStates states) const{
     }
 }
 
-std::string UI::keycode_to_string(sf::Keyboard::Key keycode) {
+//======================================private======================================
+//======================================public=======================================
+
+std::string UI::keycode_to_string(sf::Keyboard::Key keycode){
     switch (keycode) {
         case sf::Keyboard::A: return "A";
         case sf::Keyboard::B: return "B";

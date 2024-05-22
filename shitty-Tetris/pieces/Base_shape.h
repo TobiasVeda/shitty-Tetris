@@ -19,20 +19,24 @@ protected:
     sf::RectangleShape _r3;
     sf::RectangleShape _r4;
 
+    static inline sf::Image _tileset;
     sf::Texture _texture;
     bool _placed;
 
+    void draw(sf::RenderTarget&, sf::RenderStates) const override;
+
 public:
-    std::list<sf::RectangleShape> get_rectangle_list();
-    void place();
-    void rotate(float);
-    void move(sf::Vector2f);
+    Base_shape();
+
     void set_position(sf::Vector2f);
+    void move(sf::Vector2f);
+    void rotate(float);
+    void place();
+
     [[nodiscard]] bool intersects(sf::RectangleShape&) const;
     [[nodiscard]] bool is_placed() const;
     [[nodiscard]] Constants::Block_types get_blocktype() const;
-    virtual bool load();
-    void draw(sf::RenderTarget&, sf::RenderStates) const override;
+    [[nodiscard]] std::list<sf::RectangleShape> get_rectangle_list();
 };
 
 #endif //TILEMAP_BASE_SHAPE_H

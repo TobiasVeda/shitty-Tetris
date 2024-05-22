@@ -18,6 +18,39 @@ Main_menu::Main_menu(sf::RenderWindow &window){
 
 }
 
+void Main_menu::test_hover(sf::Vector2i mouse) {
+
+    if (_solo_container.getGlobalBounds().contains((float)mouse.x, (float)mouse.y)){
+        _solo_container.setFillColor(sf::Color::Yellow);
+        _solo_text.setFillColor(sf::Color::White);
+    } else if(_duo_container.getGlobalBounds().contains((float)mouse.x, (float)mouse.y)){
+        _duo_container.setFillColor(sf::Color::Yellow);
+        _duo_text.setFillColor(sf::Color::White);
+    } else{
+        _solo_container.setFillColor(sf::Color::Cyan);
+        _solo_text.setFillColor(sf::Color::Black);
+        _duo_container.setFillColor(sf::Color::Cyan);
+        _duo_text.setFillColor(sf::Color::Black);
+    }
+}
+
+int Main_menu::test_click(sf::Vector2i mouse) {
+    if (_solo_container.getGlobalBounds().contains((float)mouse.x, (float)mouse.y)){
+        _solo_container.setFillColor(sf::Color::Red);
+        _solo_text.setFillColor(sf::Color::Cyan);
+        return 1;
+    } else if(_duo_container.getGlobalBounds().contains((float)mouse.x, (float)mouse.y)){
+        _duo_container.setFillColor(sf::Color::Red);
+        _duo_text.setFillColor(sf::Color::Cyan);
+        return 2;
+    } else{
+        return -1;
+    }
+}
+
+//======================================public=======================================
+//======================================private======================================
+
 void Main_menu::construct_container() {
 
     _menu_container.setSize(_view.getSize());
@@ -68,45 +101,27 @@ void Main_menu::construct_text() {
             _duo_container.getPosition().x + 45,
             _duo_container.getPosition().y + 30
     );
+
+    _cc.setCharacterSize(30);
+    _cc.setFont(_font);
+    _cc.setFillColor(sf::Color::White);
+    _cc.setString("Tetris Theme - Korobeiniki - Arranged for Piano\n"
+                        "by GregorQuendel -- \n"
+                        "https://freesound.org/s/719393/ -- License: \n"
+                        "Attribution NonCommercial 4.0");
+    _cc.setPosition(
+            10,
+            _view.getSize().y - ((float)_cc.getCharacterSize() * 5)
+    );
 }
 
-
-
-void Main_menu::test_hover(sf::Vector2i mouse) {
-
-    if (_solo_container.getGlobalBounds().contains((float)mouse.x, (float)mouse.y)){
-        _solo_container.setFillColor(sf::Color::Yellow);
-        _solo_text.setFillColor(sf::Color::White);
-    } else if(_duo_container.getGlobalBounds().contains((float)mouse.x, (float)mouse.y)){
-        _duo_container.setFillColor(sf::Color::Yellow);
-        _duo_text.setFillColor(sf::Color::White);
-    } else{
-        _solo_container.setFillColor(sf::Color::Cyan);
-        _solo_text.setFillColor(sf::Color::Black);
-        _duo_container.setFillColor(sf::Color::Cyan);
-        _duo_text.setFillColor(sf::Color::Black);
-    }
-}
-
-int Main_menu::test_click(sf::Vector2i mouse){
-    if (_solo_container.getGlobalBounds().contains((float)mouse.x, (float)mouse.y)){
-        _solo_container.setFillColor(sf::Color::Red);
-        _solo_text.setFillColor(sf::Color::Cyan);
-        return 1;
-    } else if(_duo_container.getGlobalBounds().contains((float)mouse.x, (float)mouse.y)){
-        _duo_container.setFillColor(sf::Color::Red);
-        _duo_text.setFillColor(sf::Color::Cyan);
-        return 2;
-    } else{
-        return -1;
-    }
-}
 
 void Main_menu::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(_menu_container, states);
     target.draw(_title, states);
-    target.draw(_solo_container);
-    target.draw(_duo_container);
-    target.draw(_solo_text);
-    target.draw(_duo_text);
+    target.draw(_solo_container, states);
+    target.draw(_duo_container, states);
+    target.draw(_solo_text, states);
+    target.draw(_duo_text, states);
+    target.draw(_cc, states);
 }

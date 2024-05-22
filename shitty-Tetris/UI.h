@@ -42,13 +42,17 @@ protected:
 
     bool construct_text();
     void construct_container();
-    std::string keycode_to_string(sf::Keyboard::Key);
+
+    void draw(sf::RenderTarget&, sf::RenderStates) const override;
+
 public:
     UI();
     ~UI();
+
     void update(Constants::Block_types, std::vector<int>, Constants::Game_states);
     void set_key_string(sf::Keyboard::Key);
-    void draw(sf::RenderTarget&, sf::RenderStates) const override;
+
+    static std::string keycode_to_string(sf::Keyboard::Key);
 };
 
 
