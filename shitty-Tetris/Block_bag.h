@@ -5,13 +5,13 @@
 #ifndef TILEMAP_BLOCK_BAG_H
 #define TILEMAP_BLOCK_BAG_H
 
-#include "pieces/Base_shape.h"
+#include "model/pieces/Base_shape.h"
 #include "Constants.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 
 class Block_bag {
-protected:
+private:
     static inline std::vector<Constants::Block_types> _bag;
     static inline std::vector<Constants::Block_types> _next;
 

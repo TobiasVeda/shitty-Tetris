@@ -3,7 +3,7 @@
 //
 
 #include "Keybinds.h"
-#include "pieces/Base_shape.h"
+#include "../model/pieces/Base_shape.h"
 #include <SFML/Graphics.hpp>
 
 void Keybinds::assign_default(int player) {
@@ -137,4 +137,10 @@ bool Keybinds::joystick_centered(unsigned int id, float x, float y) const{
         return true;
     }
     return false;
+}
+
+
+std::list<sf::Keyboard::Key> Keybinds::get_keybinds_list() {
+    return std::list<sf::Keyboard::Key>
+            {_key_down, _key_right, _key_left, _key_clockwise, _key_counter_clock, _key_drop, _key_hold};
 }

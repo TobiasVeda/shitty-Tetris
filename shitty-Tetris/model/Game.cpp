@@ -3,10 +3,10 @@
 //
 
 #include "Game.h"
-#include "Block_bag.h"
+#include "../Block_bag.h"
 #include "Keybinds.h"
-#include "Audio.h"
-#include "Constants.h"
+#include "../view/Audio.h"
+#include "../Constants.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 
@@ -92,23 +92,13 @@ void Game::do_gametick_action() {
 
 void Game::resize(float x, float y) {
 
-
     float new_x = _basesize_view_x / x;
     float new_y = _basesize_view_y / y;
 
     float multiply = std::min(x, y);
-    multiply = multiply * 0.001;
+    multiply *= 0.001;
 
     _view.setViewport(sf::FloatRect(_pos_x_view, _pos_y_view, new_x * multiply, new_y * multiply));
-//    _view.setSize(x * new_x, y * new_y);
-
-//    if (x > y) {
-//
-//        _view.setViewport(sf::FloatRect(_pos_x_view, _pos_y_view, new_x, _size_y_view));
-//    } else if (x < y) {
-//
-//        _view.setViewport(sf::FloatRect(_pos_x_view, _pos_y_view, _size_x_view, new_y));
-//    }
 }
 
 
@@ -116,8 +106,20 @@ Constants::Block_types Game::get_held_type() const{
     return _held_blocktype;
 }
 
-std::vector<int> Game::get_scoreboard() const{
+std::vector<unsigned int> Game::get_scoreboard() const{
     return std::vector{_score, _level, _lines_cleared};
+}
+
+unsigned int Game::get_score() const {
+    return _score;
+}
+
+[[maybe_unused]] unsigned int Game::get_level() const {
+    return _level;
+}
+
+unsigned int Game::get_lines_cleared() const {
+    return _lines_cleared;
 }
 
 sf::View& Game::get_view(){
@@ -378,7 +380,7 @@ void Game::try_levelup(){
     _level = floor(new_level);
 }
 
-int Game::calculate_clear_points(int lines_count){
+unsigned int Game::calculate_clear_points(int lines_count) const {
     // A block have the maximum length of 4.
 
     if (lines_count < 4 && lines_count >=1){
@@ -400,16 +402,16 @@ int Game::calculate_clear_points(int lines_count){
     }
 }
 
-int Game::calculate_move_points(){
+unsigned int Game::calculate_move_points() const{
     return 1 * _level;
 }
 
-int Game::calculate_drop_points(){
+unsigned int Game::calculate_drop_points() const{
     return 2 * _level;
 }
 
 
-bool Game::player_intersects_with_stack(){
+bool Game::player_intersects_with_stack() {
     for (auto& stack_rectangle : _block_stack) {
         if (_player_controlled_block->intersects(stack_rectangle)){
             return true;

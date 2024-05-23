@@ -4,13 +4,16 @@
 #include "Base_shape.h"
 #include <SFML/Graphics.hpp>
 #include <list>
+#include <iostream>
 
 Base_shape::Base_shape() {
+    // Tileset not found will not exit the program. Blocks will be assigned
+    // a color, and the tilemap will be blank. Technically playable.
+
     _placed = false;
     _type = Constants::Ndef;
-
-    if (!_tileset.loadFromFile(Constants::texture_name)){
-        _tileset.loadFromFile(Constants::texture_name);
+    if(!_tileset.loadFromFile(Constants::texture_name)){
+        std::cout <<"Unable to load tileset for block" <<std::endl;
     }
 }
 void Base_shape::set_position(sf::Vector2f position){

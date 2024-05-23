@@ -5,12 +5,13 @@
 #ifndef SHITTY_TETRIS_KEYBINDS_H
 #define SHITTY_TETRIS_KEYBINDS_H
 
-#include "pieces/Base_shape.h"
-#include "Constants.h"
+#include "../model/pieces/Base_shape.h"
+#include "../Constants.h"
 #include <SFML/Graphics.hpp>
+#include <list>
 
 class Keybinds {
-protected:
+private:
     unsigned int _joystick_id;
     bool _using_gamepad = false;
 
@@ -31,6 +32,8 @@ public:
     [[nodiscard]] Constants::Actions translate_joystick_move(unsigned int, float, float) const;
 
     [[nodiscard]] bool joystick_centered(unsigned int, float, float) const;
+
+    [[nodiscard]] std::list<sf::Keyboard::Key> get_keybinds_list();
 };
 
 

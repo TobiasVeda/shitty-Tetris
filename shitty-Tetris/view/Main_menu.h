@@ -5,11 +5,11 @@
 #ifndef SHITTY_TETRIS_MAIN_MENU_H
 #define SHITTY_TETRIS_MAIN_MENU_H
 
-#include "Constants.h"
+#include "../Constants.h"
 #include <SFML/Graphics.hpp>
 
 class Main_menu : public sf::Drawable{
-protected:
+private:
     sf::View _view;
     sf::RectangleShape _menu_container;
     sf::RectangleShape _title;
@@ -24,13 +24,22 @@ protected:
 
     sf::Text _cc;
 
+    // Needed for resize
+    float _pos_x_view;
+    float _pos_y_view;
+    float _basesize_view_x;
+    float _basesize_view_y;
+
     void construct_container();
+    void place_container();
     void construct_text();
 
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
 
 public:
     explicit Main_menu(sf::RenderWindow&);
+
+    void resize(float, float);
 
     void test_hover(sf::Vector2i);
     [[nodiscard]] int test_click(sf::Vector2i);

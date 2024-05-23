@@ -3,8 +3,8 @@
 //
 
 #include "UI.h"
-#include "Constants.h"
-#include "Block_bag.h"
+#include "../Constants.h"
+#include "../Block_bag.h"
 #include <SFML/Graphics.hpp>
 
 UI::UI(){
@@ -19,8 +19,20 @@ UI::~UI() noexcept {
     delete _next3;
 }
 
+void UI::winner() {
+    _game_over.setString("WINNER!");
+}
 
-void UI::update(Constants::Block_types hold_type, std::vector<int> scoreboard, Constants::Game_states state){
+void UI::loser() {
+    _game_over.setString("LOSER");
+}
+
+void UI::tie() {
+    _game_over.setString("TIE");
+}
+
+
+void UI::update(Constants::Block_types hold_type, std::vector<unsigned int> scoreboard, Constants::Game_states state){
     _state = state;
 
     if (hold_type != Constants::Ndef){
@@ -59,18 +71,32 @@ void UI::update(Constants::Block_types hold_type, std::vector<int> scoreboard, C
 
 }
 
-void UI::set_key_string(sf::Keyboard::Key key) {
+void UI::set_all_keys_string(const std::list<sf::Keyboard::Key>& key_list) {
+    _string_keybinds = "";
+    for (auto& key : key_list) {
+        _string_keybinds.append(keycode_to_string(key));
+        _string_keybinds.append("\n");
+    }
+    _keybinds.setString(_string_keybinds);
+}
 
+void UI::set_key_string(sf::Keyboard::Key key) {
     _string_keybinds.append(keycode_to_string(key));
     _string_keybinds.append("\n");
     _keybinds.setString(_string_keybinds);
 }
 
+void UI::set_joystick_string() {
+    _keybinds.setString("STICK DOWN\nSTICK RIGHT\nSTICK LEFT\nB\nY\nA\nX\n");
+}
+
 //======================================public=======================================
 //======================================private======================================
 
-bool UI::construct_text() {
-    bool return_value = _font.loadFromFile(Constants::font_name);
+void UI::construct_text() {
+    if(!_font.loadFromFile(Constants::font_name)){
+        throw std::exception("Unable to load UI font");
+    }
 
     _score.setFont(_font);
     _level.setFont(_font);
@@ -147,8 +173,6 @@ bool UI::construct_text() {
 
     _key_description.setPosition(10, 40);
     _keybinds.setPosition(320, 168);
-
-    return return_value;
 }
 
 void UI::construct_container(){

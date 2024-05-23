@@ -5,7 +5,7 @@
 #ifndef TILEMAP_BASE_SHAPE_H
 #define TILEMAP_BASE_SHAPE_H
 
-#include "../Constants.h"
+#include "../../Constants.h"
 #include <SFML/Graphics.hpp>
 #include <list>
 

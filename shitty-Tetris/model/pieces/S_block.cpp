@@ -2,19 +2,19 @@
 // Created by tobia on 28.04.2024.
 //
 
-#include "Z_block.h"
-#include "../Constants.h"
+#include "S_block.h"
+#include "../../Constants.h"
 #include <SFML/Graphics.hpp>
 
-Z_block::Z_block(sf::Vector2f position){
-    _type = Constants::Block_types::Z;
+S_block::S_block(sf::Vector2f position){
+    _type = Constants::Block_types::S;
     _placed = false;
-    auto block_color = sf::Color::Red;
+    auto block_color = sf::Color::Green;
     auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
     int x = (int)Constants::tilesize.x;
     int y = (int)Constants::tilesize.y;
 
-    if (_texture.loadFromImage(_tileset, sf::IntRect(0*x, y, x, y))){
+    if (_texture.loadFromImage(_tileset, sf::IntRect(x, y, x, y))){
         _r1.setTexture(&_texture);
         _r2.setTexture(&_texture);
         _r3.setTexture(&_texture);
@@ -26,10 +26,10 @@ Z_block::Z_block(sf::Vector2f position){
         _r4.setFillColor(block_color);
     }
 
-    _r1.setOrigin(sf::Vector2f(60, 20));
-    _r2.setOrigin(sf::Vector2f(20, 20));
-    _r3.setOrigin(sf::Vector2f(20, -20));
-    _r4.setOrigin(sf::Vector2f(-20, -20));
+    _r1.setOrigin(sf::Vector2f(60, -20));
+    _r2.setOrigin(sf::Vector2f(20, -20));
+    _r3.setOrigin(sf::Vector2f(20, 20));
+    _r4.setOrigin(sf::Vector2f(-20, 20));
 
     _r1.setPosition(position);
     _r2.setPosition(position);
@@ -40,5 +40,4 @@ Z_block::Z_block(sf::Vector2f position){
     _r2.setSize(tilesize_f);
     _r3.setSize(tilesize_f);
     _r4.setSize(tilesize_f);
-
 }

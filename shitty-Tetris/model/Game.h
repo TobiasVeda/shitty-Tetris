@@ -7,14 +7,16 @@
 
 #include "pieces/Base_shape.h"
 #include "Keybinds.h"
-#include "Constants.h"
+#include "../Constants.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 
 class Game : public sf::Drawable{
-protected:
+private:
 
     sf::View _view;
+
+    // Needed for resize
     float _pos_x_view;
     float _pos_y_view;
     float _basesize_view_x;
@@ -29,9 +31,9 @@ protected:
     bool _held_this_turn;
     std::vector<sf::RectangleShape> _block_stack;
 
-    int _score;
-    int _level;
-    int _lines_cleared;
+    unsigned int _score;
+    unsigned int _level;
+    unsigned int _lines_cleared;
     bool _is_dead;
 
     void set_bounds();
@@ -53,9 +55,9 @@ protected:
     void try_death();
 
     void try_levelup();
-    [[nodiscard]] int calculate_clear_points(int);
-    [[nodiscard]] int calculate_move_points();
-    [[nodiscard]] int calculate_drop_points();
+    [[nodiscard]] unsigned int calculate_clear_points(int) const;
+    [[nodiscard]] unsigned int calculate_move_points() const;
+    [[nodiscard]] unsigned int calculate_drop_points() const;
 
     [[nodiscard]] bool player_intersects_with_stack();
     [[nodiscard]] bool player_intersects_with_bounds();
@@ -79,7 +81,10 @@ public:
     void resize(float, float);
 
     [[nodiscard]] Constants::Block_types get_held_type() const;
-    [[nodiscard]] std::vector<int> get_scoreboard() const;
+    [[nodiscard]] std::vector<unsigned int> get_scoreboard() const;
+    [[nodiscard]] unsigned int get_score() const;
+    [[maybe_unused]] [[nodiscard]] unsigned int get_level() const;
+    [[maybe_unused]] [[nodiscard]] unsigned int get_lines_cleared() const;
     [[nodiscard]] sf::View& get_view();
     [[nodiscard]] double get_gravity_delay_ms() const;
     [[nodiscard]] bool is_dead() const;

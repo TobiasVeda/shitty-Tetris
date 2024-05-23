@@ -2,8 +2,8 @@
 // Created by tobia on 23.04.2024.
 //
 #include "Block_bag.h"
-#include "pieces/Base_shape.h"
-#include "pieces/all_pieces.h"
+#include "model/pieces/Base_shape.h"
+#include "model/pieces/all_pieces.h"
 #include <SFML/Graphics.hpp>
 #include <random>
 

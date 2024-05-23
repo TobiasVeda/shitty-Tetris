@@ -5,13 +5,14 @@
 #ifndef SHITTY_TETRIS_UI_H
 #define SHITTY_TETRIS_UI_H
 
-#include "pieces/Base_shape.h"
-#include "Constants.h"
+#include "../model/pieces/Base_shape.h"
+#include "../Constants.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <list>
 
 class UI : public sf::Drawable{
-protected:
+private:
     Constants::Game_states _state;
 
     sf::Font _font;
@@ -40,7 +41,7 @@ protected:
 
     sf::Text _game_over;
 
-    bool construct_text();
+    void construct_text();
     void construct_container();
 
     void draw(sf::RenderTarget&, sf::RenderStates) const override;
@@ -49,8 +50,14 @@ public:
     UI();
     ~UI();
 
-    void update(Constants::Block_types, std::vector<int>, Constants::Game_states);
+    void winner();
+    void loser();
+    void tie();
+
+    void update(Constants::Block_types, std::vector<unsigned int>, Constants::Game_states);
+    void set_all_keys_string(const std::list<sf::Keyboard::Key>&);
     void set_key_string(sf::Keyboard::Key);
+    void set_joystick_string();
 
     static std::string keycode_to_string(sf::Keyboard::Key);
 };

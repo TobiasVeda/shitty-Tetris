@@ -9,7 +9,7 @@
 #include <SFML/Audio.hpp>
 
 class Audio {
-protected:
+private:
     static inline sf::SoundBuffer _lineclear_buffer;
     static inline sf::SoundBuffer _tetris_buffer;
     static inline sf::SoundBuffer _placed_buffer;

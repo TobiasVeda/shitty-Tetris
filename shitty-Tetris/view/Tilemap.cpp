@@ -5,16 +5,18 @@
 //
 
 #include "Tilemap.h"
-#include "Constants.h"
+#include "../Constants.h"
+#include <iostream>
 
 Tilemap::Tilemap() {
-    // load the tileset texture
 
+
+    // load the tileset texture. Continuing to construct is unnecessary if a texture is not found.
     if (!_tileset.loadFromFile(Constants::texture_name)){
-        if (!_tileset.loadFromFile(Constants::texture_name)){
-            _tileset.create(Constants::tilesize.x, Constants::tilesize.y);
-        }
+        std::cout <<"Unable to load tileset for tilemap" <<std::endl;
+        return;
     }
+
 
     // resize the vertex array to fit the level size
     _vertices.setPrimitiveType(sf::Quads);
@@ -33,10 +35,12 @@ Tilemap::Tilemap() {
             int tileNumber = Constants::level_map[i + j * Constants::tile_count_x];
 //                i=collum j=row, i=x j=y
 
+
             // find its position in the tileset texture
             // gets the entire width of the texture and divides it by the width of a single tile
             int tu = tileNumber % (_tileset.getSize().x / Constants::tilesize.x);
             int tv = tileNumber / (_tileset.getSize().x / Constants::tilesize.x);
+
 
             // get a pointer to the current tile's quad
             sf::Vertex* quad = &_vertices[(i + j * Constants::tile_count_x) * 4];
