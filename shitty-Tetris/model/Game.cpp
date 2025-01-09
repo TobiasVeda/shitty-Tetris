@@ -3,19 +3,15 @@
 //
 
 #include "Game.h"
-#include "../Block_bag.h"
+#include "Block_generator.h"
 #include "Keybinds.h"
 #include "../view/Audio.h"
+#include "../Enumerations.h"
 #include "../Constants.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-
-Game::~Game() noexcept {
-    delete _player_controlled_block;
-}
-
-void Game::setup(int player) {
+Game::Game(unsigned int player) {
 
     _view.setSize(sf::Vector2f(600, 720)); // multiple of Constants::tilesize
     _view.setCenter(sf::Vector2f(300,360));
@@ -33,9 +29,11 @@ void Game::setup(int player) {
     _basesize_view_x = _view.getSize().x;
     _basesize_view_y = _view.getSize().y;
 
-    _player_controlled_block = Block_bag::get_new_block();
+    _generator = new Block_generator();
+
+    _player_controlled_block = _generator->generate();
     _held_this_turn = false;
-    _held_blocktype = Constants::Ndef;
+    _held_blocktype = Block_types::Ndef;
 
     _score = 0;
     _level = 1;
@@ -45,33 +43,39 @@ void Game::setup(int player) {
     set_bounds();
 }
 
-void Game::do_action(Constants::Actions action) {
+Game::~Game() noexcept {
+    delete _generator;
+    delete _player_controlled_block;
+}
+
+
+void Game::do_action(Actions action) {
 
     switch (action) {
-        case Constants::Move_down:
-            move_player(Constants::Directions::Down);
+        case Actions::Move_down:
+            move_player(Directions::Down);
             break;
-        case Constants::Move_right:
-            move_player(Constants::Directions::Right);
+        case Actions::Move_right:
+            move_player(Directions::Right);
             break;
-        case Constants::Move_left:
-            move_player(Constants::Directions::Left);
+        case Actions::Move_left:
+            move_player(Directions::Left);
             break;
-        case Constants::Rotate_clockwise:
-            rotate_player(Constants::Rotation_direction::Clockwise);
+        case Actions::Rotate_clockwise:
+            rotate_player(Rotation_direction::Clockwise);
             break;
-        case Constants::Rotate_counter_clock:
-            rotate_player(Constants::Rotation_direction::Counter_clock);
+        case Actions::Rotate_counter_clock:
+            rotate_player(Rotation_direction::Counter_clock);
             break;
-        case Constants::Drop:
+        case Actions::Drop:
             drop_player();
             break;
-        case Constants::Hold:
+        case Actions::Hold:
             if (!_held_this_turn){
                 hold_player();
             }
             break;
-        case Constants::Nothing:
+        case Actions::Nothing:
             break;
     }
 }
@@ -102,8 +106,12 @@ void Game::resize(float x, float y) {
 }
 
 
-Constants::Block_types Game::get_held_type() const{
+Block_types Game::get_held_type() const{
     return _held_blocktype;
+}
+
+std::vector<Block_types> Game::get_3_next_types() const {
+    return _generator->get_next_vector();
 }
 
 std::vector<unsigned int> Game::get_scoreboard() const{
@@ -118,7 +126,7 @@ unsigned int Game::get_score() const {
     return _level;
 }
 
-unsigned int Game::get_lines_cleared() const {
+[[maybe_unused]] unsigned int Game::get_lines_cleared() const {
     return _lines_cleared;
 }
 
@@ -162,35 +170,35 @@ void Game::set_bounds() {
 }
 
 
-void Game::move_player(Constants::Directions direction){
+void Game::move_player(Directions direction){
     // To be able to move horizontally and vertically at the same time,
     // all cases of "move" must be possible to execute from one run
     bool next_pos_valid_down = player_clear_to_move_down();
     bool next_pos_valid_right = player_clear_to_move_right();
     bool next_pos_valid_left = player_clear_to_move_left();
 
-    if (direction == Constants::Down && next_pos_valid_down){
+    if (direction == Directions::Down && next_pos_valid_down){
         auto down = sf::Vector2f(0, (float)Constants::tilesize.y);
         _player_controlled_block->move(down);
         _score += calculate_move_points();
     }
-    if (direction == Constants::Right && next_pos_valid_right){
-        auto right = sf::Vector2f( (float)Constants::tilesize.y, 0);
+    if (direction == Directions::Right && next_pos_valid_right){
+        auto right = sf::Vector2f((float)Constants::tilesize.y, 0);
         _player_controlled_block->move(right);
     }
-    if (direction == Constants::Left && next_pos_valid_left){
+    if (direction == Directions::Left && next_pos_valid_left){
         auto left = sf::Vector2f(-1 * (float)Constants::tilesize.y, 0);
         _player_controlled_block->move(left);
     }
 
 }
 
-void Game::rotate_player(Constants::Rotation_direction direction){
+void Game::rotate_player(Rotation_direction direction){
     switch (direction) {
-        case Constants::Clockwise:
+        case Rotation_direction::Clockwise:
             player_clear_to_rotate_clockwise(true);
             break;
-        case Constants::Counter_clock:
+        case Rotation_direction::Counter_clock:
             player_clear_to_rotate_counter_clock(true);
             break;
     }
@@ -216,13 +224,13 @@ void Game::hold_player(){
     // If first call: The type of player block is stored, and player is given a new block.
     // If not first call: Player type is stored, and player is given a new block with the previous stored type.
     _held_this_turn = true;
-    if (_held_blocktype == Constants::Ndef){
+    if (_held_blocktype == Block_types::Ndef){
         _held_blocktype = _player_controlled_block->get_blocktype();
-        _player_controlled_block = Block_bag::get_new_block();
+        _player_controlled_block = _generator->generate();
     } else{
-        Constants::Block_types temp_type = _held_blocktype;
+        Block_types temp_type = _held_blocktype;
         _held_blocktype = _player_controlled_block->get_blocktype();
-        _player_controlled_block = Block_bag::get_new_block(temp_type);
+        _player_controlled_block = _generator->generate(temp_type);
     }
 }
 
@@ -257,7 +265,7 @@ void Game::try_lineclear(){
             // Emplace_back how many lines are below the full line.
             // Clears the row at the current y level
             if (fill_count == Constants::tile_count_x){
-                float line_cleared_coord = (Constants::tile_count_y) - ((check_coord.y +1 ) / (float)Constants::tilesize.y);
+                float line_cleared_coord = (Constants::tile_count_y) - ((check_coord.y + 1 ) / (float)Constants::tilesize.y);
                 coord_line_cleared.emplace_back(line_cleared_coord);
 
                 clear_row((float)y);
@@ -362,7 +370,7 @@ void Game::new_round(){
     add_player_to_collection();
     try_lineclear();
     try_levelup();
-    _player_controlled_block = Block_bag::get_new_block();
+    _player_controlled_block = _generator->generate();
     try_death();
     _held_this_turn = false;
 }

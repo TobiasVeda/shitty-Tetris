@@ -7,6 +7,7 @@
 
 #include "Player_instance.h"
 #include "../view/Main_menu.h"
+#include "../Enumerations.h"
 #include <SFML/Graphics.hpp>
 #include <thread>
 #include <mutex>
@@ -31,6 +32,9 @@ private:
     Player_instance *_p1;
     Player_instance *_p2;
 
+    std::thread _p1_gravity;
+    std::thread _p2_gravity;
+
     void start_players();
 
     bool game_finished();
@@ -50,10 +54,10 @@ public:
     void joystick_moved(unsigned int, float, float); // mutex
 
     void closed();
-    void key_released(sf::Keyboard::Key);
+    void key_released(sf::Keyboard::Key); // mutex
     void gained_focus();
     void lost_focus();
-    void resized(unsigned int, unsigned int);
+    void resized(unsigned int, unsigned int); // mutex
     void mouse_pressed(sf::Vector2i);
     void mouse_moved(sf::Vector2i);
 };

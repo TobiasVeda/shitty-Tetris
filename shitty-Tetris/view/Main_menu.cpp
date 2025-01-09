@@ -5,38 +5,38 @@
 #include "Main_menu.h"
 #include "../Constants.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 Main_menu::Main_menu(sf::RenderWindow &window){
     _view.setSize(sf::Vector2f((float)window.getSize().x, (float)window.getSize().y));
     _view.setCenter((float)window.getSize().x /2, (float)window.getSize().y /2);
     window.setView(_view);
 
-    if (!_title_texture.loadFromFile(Constants::title_texture)) {
-        throw std::exception("Unable to load menu main title");
+    try{
+        if (!_title_texture.loadFromFile(Constants::title_texture)) {
+            throw std::exception("Unable to load menu main title");
+        }
+    } catch (std::exception& e){
+        std::cerr <<e.what() <<std::endl;
     }
 
     construct_container();
-    construct_text();
 
-    _pos_x_view = _view.getViewport().getPosition().x;
-    _pos_y_view = _view.getViewport().getPosition().y;
-    _basesize_view_x = _view.getSize().x;
-    _basesize_view_y = _view.getSize().y;
+    try{
+        if(!_font.loadFromFile(Constants::font_name)){
+            throw std::exception("Unable to load main menu font");
+        }
+    } catch (std::exception& e){
+        std::cerr <<e.what() <<std::endl;
+    }
+
+    construct_text();
 
 }
 
 
 void Main_menu::resize(float x, float y) {
-    float new_x = _basesize_view_x / x;
-    float new_y = _basesize_view_y / y;
 
-    float multiply = std::min(x, y);
-    multiply *= 0.001;
-
-    _view.setSize(x, y);
-//    _view.setViewport(sf::FloatRect(_pos_x_view, _pos_y_view, new_x * multiply, new_y * multiply));
-
-    construct_container();
 }
 
 
@@ -75,7 +75,7 @@ int Main_menu::test_click(sf::Vector2i mouse) {
 
 void Main_menu::construct_container(){
 
-    _menu_container.setSize(_view.getSize());
+    _menu_container.setSize(sf::Vector2f(_view.getSize().x, _view.getSize().y));
     _menu_container.setPosition(0, 0);
     _menu_container.setFillColor(sf::Color(6, 18, 107));
 
@@ -88,23 +88,24 @@ void Main_menu::construct_container(){
     _title.setSize(sf::Vector2f(value / 2.7, value / 4.5));
     _title.setPosition(
             (_view.getSize().x /2) - (_title.getSize().x /2),
-            value / 9
+            (_view.getSize().y / 10)
     );
     _title.setTexture(&_title_texture);
 
-    int center_offset = value / 3.37;
+    float edge_offset = _view.getSize().x / 6.f;
+    float top_offset = (_view.getSize().y / 3.f) * 1.5f;
 
     _solo_container.setSize(sf::Vector2f(value / 3.37, value / 9));
     _solo_container.setPosition(
-            (_view.getSize().x /2) - (_solo_container.getSize().x) - center_offset,
-            value / 1.8
+            edge_offset,
+            top_offset
     );
     _solo_container.setFillColor(sf::Color::Cyan);
 
     _duo_container.setSize(sf::Vector2f(value / 3.37,  value / 9));
     _duo_container.setPosition(
-            (_view.getSize().x /2) + center_offset,
-            value / 1.8
+            (_view.getSize().x) - _duo_container.getSize().x - edge_offset,
+            top_offset
     );
     _duo_container.setFillColor(sf::Color::Cyan);
 }
@@ -113,9 +114,7 @@ void Main_menu::construct_container(){
 
 void Main_menu::construct_text() {
 
-    if(!_font.loadFromFile(Constants::font_name)){
-        throw std::exception("Unable to load main menu font");
-    }
+
 
     _solo_text.setCharacterSize(50);
     _solo_text.setFont(_font);
@@ -150,6 +149,8 @@ void Main_menu::construct_text() {
 
 
 void Main_menu::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    target.setView(_view);
+
     target.draw(_menu_container, states);
     target.draw(_title, states);
     target.draw(_solo_container, states);

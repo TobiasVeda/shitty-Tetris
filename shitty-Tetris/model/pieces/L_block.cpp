@@ -3,14 +3,15 @@
 //
 
 #include "L_block.h"
+#include "../../Enumerations.h"
 #include "../../Constants.h"
 #include <SFML/Graphics.hpp>
 
 L_block::L_block(sf::Vector2f position){
-    _type = Constants::Block_types::L;
+    _type = Block_types::L;
     _placed = false;
-    auto block_color = sf::Color::Blue;
-    auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
+    auto block_color = sf::Color(251, 148, 3); // Orange
+    sf::Vector2f tilesize_f((float)Constants::tilesize.x - 0.5f, (float)Constants::tilesize.y - 0.5f);
     int x = (int)Constants::tilesize.x;
     int y = (int)Constants::tilesize.y;
 

@@ -9,22 +9,24 @@
 #include "../view/Tilemap.h"
 #include "../view/UI.h"
 #include "../model/Keybinds.h"
+#include "../Enumerations.h"
 #include <SFML/Graphics.hpp>
+#include <chrono>
 
 
 class Player_instance : public sf::Drawable{
 private:
 
-    int _player;
+    unsigned int _player;
     Game *_game;
     Keybinds *_keybinds;
     Tilemap *_tilemap;
     UI *_ui;
 
-    int _keybind_loop;
+    unsigned int _keybind_loop;
 
-    bool _joystick_ready = true;
-    bool _joystick_assigned = false;
+    bool _joystick_ready;
+    bool _joystick_assigned;
 
     bool _is_dead;
 
@@ -41,7 +43,7 @@ public:
     void joystick_button_handler(unsigned int, unsigned int);
     void joystick_move_handler(unsigned int, float, float);
 
-    void set_end_state(Constants::End_states);
+    void set_end_state(End_states);
     [[nodiscard]] bool is_dead() const;
     [[nodiscard]] unsigned int get_score() const;
 

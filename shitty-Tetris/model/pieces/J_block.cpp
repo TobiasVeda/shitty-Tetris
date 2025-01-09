@@ -3,14 +3,15 @@
 //
 
 #include "J_block.h"
+#include "../../Enumerations.h"
 #include "../../Constants.h"
 #include <SFML/Graphics.hpp>
 
 J_block::J_block(sf::Vector2f position){
-    _type = Constants::Block_types::J;
+    _type = Block_types::J;
     _placed = false;
-    auto block_color = sf::Color(251, 148, 3);
-    auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
+    auto block_color = sf::Color::Blue;
+    sf::Vector2f tilesize_f((float)Constants::tilesize.x - 0.5f, (float)Constants::tilesize.y - 0.5f);
     int x = (int)Constants::tilesize.x;
     int y = (int)Constants::tilesize.y;
 

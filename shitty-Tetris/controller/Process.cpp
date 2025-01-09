@@ -4,7 +4,8 @@
 
 #include "Process.h"
 #include "../view/Audio.h"
-#include "../Constants.h"
+#include "../view/Main_menu.h"
+#include "../Enumerations.h"
 #include <SFML/Graphics.hpp>
 #include <windows.h>
 #include <thread>
@@ -28,6 +29,12 @@ Process::Process(sf::RenderWindow *window) {
 }
 
 Process::~Process() {
+    if (_p1_gravity.joinable()){
+        _p1_gravity.join();
+    }
+    if (_p2_gravity.joinable()){
+        _p2_gravity.join();
+    }
     delete _p1;
     delete _p2;
     delete _menu;
@@ -123,12 +130,16 @@ void Process::lost_focus() {
 
 void Process::resized(unsigned int width, unsigned int height) {
     if (_is_menu){
-        _menu->resize(width, height);
+        _menu->resize((float)width, (float)height);
+        display(); // Actions requiring mutex not started.
     } else {
+        _mutex.lock();
         _p1->resize(width, height);
         if (_is_multiplayer) {
             _p2->resize(width, height);
         }
+        display();
+        _mutex.unlock();
     }
 }
 
@@ -153,7 +164,7 @@ void Process::mouse_pressed(sf::Vector2i mouse_pos) {
 
 void Process::mouse_moved(sf::Vector2i mouse_pos) {
     if (_is_menu){
-        _menu->test_hover(sf::Mouse::getPosition(*_window));
+        _menu->test_hover(mouse_pos);
         display(); // Actions requiring mutex not started.
     }
 }
@@ -170,7 +181,7 @@ void Process::display() {
     } else{
         _window->draw(*_p1);
         if (_is_multiplayer){
-            _window->draw(*_p2);;
+            _window->draw(*_p2);
         }
     }
 
@@ -187,11 +198,9 @@ void Process::start_players() {
         _p2 = new Player_instance(true);
     }
 
-    std::thread p1_gravity(&Process::gravity_loop1, this);
-    p1_gravity.detach();
+    _p1_gravity = std::thread(&Process::gravity_loop1, this);
     if (_is_multiplayer){
-        std::thread p2_gravity(&Process::gravity_loop2, this);
-        p2_gravity.detach();
+        _p2_gravity = std::thread(&Process::gravity_loop2, this);
     }
 }
 
@@ -204,14 +213,14 @@ bool Process::game_finished() {
 void Process::set_winner() {
     if (_is_multiplayer && _p1->is_dead() && _p2->is_dead()){
         if (_p1->get_score() > _p2->get_score()){
-            _p1->set_end_state(Constants::Winner);
-            _p2->set_end_state(Constants::Loser);
+            _p1->set_end_state(End_states::Winner);
+            _p2->set_end_state(End_states::Loser);
         } else if(_p1->get_score() < _p2->get_score()){
-            _p1->set_end_state(Constants::Loser);
-            _p2->set_end_state(Constants::Winner);
+            _p1->set_end_state(End_states::Loser);
+            _p2->set_end_state(End_states::Winner);
         } else if(_p1->get_score() == _p2->get_score()){
-            _p1->set_end_state(Constants::Tie);
-            _p2->set_end_state(Constants::Tie);
+            _p1->set_end_state(End_states::Tie);
+            _p2->set_end_state(End_states::Tie);
         }
     }
 }
@@ -222,7 +231,7 @@ void Process::gravity_loop1() {
         if (!_window->isOpen()){
             break;
         }
-    };
+    }
     while (_window->isOpen()){
         _mutex.lock();
         if (game_finished()){
@@ -242,7 +251,7 @@ void Process::gravity_loop2() {
         if (!_window->isOpen()){
             break;
         }
-    };
+    }
     while (_window->isOpen()){
         _mutex.lock();
         if (game_finished()){

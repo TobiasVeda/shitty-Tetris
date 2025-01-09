@@ -1,5 +1,6 @@
 //
-// Modified by tobia on 17.04.2024 from:
+// Modified by tobia on 17.04.2024:
+// Adapted from official tutorial:
 // SFML: Designing your own entities with vertex arrays
 // Source: https://www.sfml-dev.org/tutorials/2.6/graphics-vertex-array.php
 //

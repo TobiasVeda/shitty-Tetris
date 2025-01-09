@@ -3,16 +3,20 @@
 //
 
 #include "UI.h"
+#include "../model/Block_generator.h"
+#include "../Enumerations.h"
 #include "../Constants.h"
-#include "../Block_bag.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 UI::UI(){
-    _state = Constants::Setup;
+    _state = Game_states::Setup;
+    _generator = new Block_generator();
     construct_text();
     construct_container();
 }
 UI::~UI() noexcept {
+    delete _generator;
     delete _hold;
     delete _next1;
     delete _next2;
@@ -32,18 +36,18 @@ void UI::tie() {
 }
 
 
-void UI::update(Constants::Block_types hold_type, std::vector<unsigned int> scoreboard, Constants::Game_states state){
+void UI::update(Block_types hold_type, const std::vector<Block_types>& next, std::vector<unsigned int> scoreboard, Game_states state){
     _state = state;
 
-    if (hold_type != Constants::Ndef){
-        _hold = Block_bag::get_new_block(hold_type);
+    if (hold_type != Block_types::Ndef){
+        _hold = _generator->generate(hold_type);
         _hold->set_position(sf::Vector2f(500, 160));
     } else{
         _hold = nullptr;
     }
-    _next1 = Block_bag::get_new_block(Block_bag::get_next_vector()[0]);
-    _next2 = Block_bag::get_new_block(Block_bag::get_next_vector()[1]);
-    _next3 = Block_bag::get_new_block(Block_bag::get_next_vector()[2]);
+    _next1 = _generator->generate(next[0]);
+    _next2 = _generator->generate(next[1]);
+    _next3 = _generator->generate(next[2]);
 
     _next1->set_position(sf::Vector2f(500, 380));
     _next2->set_position(sf::Vector2f(500, 500));
@@ -53,7 +57,7 @@ void UI::update(Constants::Block_types hold_type, std::vector<unsigned int> scor
     _n_level.setString(std::to_string(scoreboard[1]));
     _n_lines.setString(std::to_string(scoreboard[2]));
 
-    if (_state == Constants::End){
+    if (_state == Game_states::End){
         _score.setCharacterSize(40);
         _level.setCharacterSize(40);
         _lines.setCharacterSize(40);
@@ -94,8 +98,12 @@ void UI::set_joystick_string() {
 //======================================private======================================
 
 void UI::construct_text() {
-    if(!_font.loadFromFile(Constants::font_name)){
-        throw std::exception("Unable to load UI font");
+    try{
+        if(!_font.loadFromFile(Constants::font_name)){
+            throw std::exception("Unable to load UI font");
+        }
+    } catch (std::exception& e){
+        std::cerr <<e.what() <<std::endl;
     }
 
     _score.setFont(_font);
@@ -215,7 +223,7 @@ void UI::draw(sf::RenderTarget &target, sf::RenderStates states) const{
 
     target.draw(_hold_container, states);
     target.draw(_next_container, states);
-    if (_state != Constants::End) {
+    if (_state != Game_states::End) {
         // Prevents double draw on death
         target.draw(_score, states);
         target.draw(_level, states);
@@ -233,11 +241,11 @@ void UI::draw(sf::RenderTarget &target, sf::RenderStates states) const{
     target.draw(*_next2, states);
     target.draw(*_next3, states);
 
-    if (_state == Constants::Setup){
+    if (_state == Game_states::Setup){
         target.draw(_greyout, states);
         target.draw(_key_description, states);
         target.draw(_keybinds, states);
-    } else if (_state == Constants::End){
+    } else if (_state == Game_states::End){
         target.draw(_greyout, states);
         target.draw(_game_over, states);
         target.draw(_score, states);

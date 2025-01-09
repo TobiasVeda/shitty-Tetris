@@ -3,14 +3,15 @@
 //
 
 #include "I_block.h"
+#include "../../Enumerations.h"
 #include "../../Constants.h"
 #include <SFML/Graphics.hpp>
 
 I_block::I_block(sf::Vector2f position){
-    _type = Constants::Block_types::I;
+    _type = Block_types::I;
     _placed = false;
     auto block_color = sf::Color::Cyan;
-    auto tilesize_f = static_cast<sf::Vector2f>(Constants::tilesize);
+    sf::Vector2f tilesize_f((float)Constants::tilesize.x - 0.5f, (float)Constants::tilesize.y - 0.5f);
     // setSize need float, but Constants::tilesize is uint
     int x = (int)Constants::tilesize.x;
     int y = (int)Constants::tilesize.y;

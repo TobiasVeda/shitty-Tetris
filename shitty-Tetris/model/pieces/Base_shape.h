@@ -5,14 +5,14 @@
 #ifndef TILEMAP_BASE_SHAPE_H
 #define TILEMAP_BASE_SHAPE_H
 
-#include "../../Constants.h"
+#include "../../Enumerations.h"
 #include <SFML/Graphics.hpp>
 #include <list>
 
 class Base_shape : public sf::Drawable{
 
 protected:
-    Constants::Block_types _type;
+    Block_types _type;
 
     sf::RectangleShape _r1;
     sf::RectangleShape _r2;
@@ -35,7 +35,7 @@ public:
 
     [[nodiscard]] bool intersects(sf::RectangleShape&) const;
     [[nodiscard]] bool is_placed() const;
-    [[nodiscard]] Constants::Block_types get_blocktype() const;
+    [[nodiscard]] Block_types get_blocktype() const;
     [[nodiscard]] std::list<sf::RectangleShape> get_rectangle_list();
 };
 

@@ -4,10 +4,10 @@
 
 #include "Player_instance.h"
 #include "../view/Tilemap.h"
-#include "../Constants.h"
 #include "../model/Game.h"
 #include "../model/Keybinds.h"
 #include "../view/UI.h"
+#include "../Enumerations.h"
 #include <SFML/Graphics.hpp>
 #include <thread>
 
@@ -15,11 +15,9 @@ Player_instance::Player_instance(bool multiplayer) {
 
     _keybind_loop = 0;
     _is_dead = false;
+    _joystick_ready = true;
+    _joystick_assigned = false;
 
-    _game = new Game();
-    _keybinds = new Keybinds;
-    _ui = new UI();
-    _tilemap = new Tilemap();
 
     static bool p1 = true;
     if (multiplayer && p1){
@@ -31,8 +29,13 @@ Player_instance::Player_instance(bool multiplayer) {
         _player = 0;
     }
 
-    _game->setup(_player);
-    _ui->update(_game->get_held_type(), _game->get_scoreboard(), Constants::Setup);
+    _game = new Game(_player);
+    _keybinds = new Keybinds();
+    _ui = new UI();
+    _tilemap = new Tilemap();
+
+    _ui->update(_game->get_held_type(), _game->get_3_next_types(),
+                _game->get_scoreboard(), Game_states::Setup);
 }
 
 Player_instance::~Player_instance(){
@@ -60,37 +63,37 @@ bool Player_instance::set_keybinds(sf::Keyboard::Key keycode) {
     if (_keybind_loop <= 6){
         switch (_keybind_loop) {
             case 0:
-                _keybinds->assign_key(Constants::Move_down, keycode);
+                _keybinds->assign_key(Actions::Move_down, keycode);
                 _ui->set_key_string(keycode);
                 _keybind_loop++;
                 return true;
             case 1:
-                _keybinds->assign_key(Constants::Move_right, keycode);
+                _keybinds->assign_key(Actions::Move_right, keycode);
                 _ui->set_key_string(keycode);
                 _keybind_loop++;
                 return true;
             case 2:
-                _keybinds->assign_key(Constants::Move_left, keycode);
+                _keybinds->assign_key(Actions::Move_left, keycode);
                 _ui->set_key_string(keycode);
                 _keybind_loop++;
                 return true;
             case 3:
-                _keybinds->assign_key(Constants::Rotate_clockwise, keycode);
+                _keybinds->assign_key(Actions::Rotate_clockwise, keycode);
                 _ui->set_key_string(keycode);
                 _keybind_loop++;
                 return true;
             case 4:
-                _keybinds->assign_key(Constants::Rotate_counter_clock, keycode);
+                _keybinds->assign_key(Actions::Rotate_counter_clock, keycode);
                 _ui->set_key_string(keycode);
                 _keybind_loop++;
                 return true;
             case 5:
-                _keybinds->assign_key(Constants::Drop, keycode);
+                _keybinds->assign_key(Actions::Drop, keycode);
                 _ui->set_key_string(keycode);
                 _keybind_loop++;
                 return true;
             case 6:
-                _keybinds->assign_key(Constants::Hold, keycode);
+                _keybinds->assign_key(Actions::Hold, keycode);
                 _ui->set_key_string(keycode);
                 _keybind_loop++;
                 // Returns false when all keys assigned
@@ -99,7 +102,7 @@ bool Player_instance::set_keybinds(sf::Keyboard::Key keycode) {
     } else{
         return false;
     }
-}
+} // Yes it does.
 
 bool Player_instance::set_joystick(unsigned int id) {
 
@@ -116,7 +119,8 @@ void Player_instance::keyboard_event_handler(sf::Keyboard::Key key){
 
     if(!_is_dead) {
         _game->do_action(_keybinds->translate_key(key));
-        _ui->update(_game->get_held_type(), _game->get_scoreboard(), Constants::Run);
+        _ui->update(_game->get_held_type(), _game->get_3_next_types(),
+                    _game->get_scoreboard(), Game_states::Run);
     }
 }
 
@@ -124,7 +128,8 @@ void Player_instance::joystick_button_handler(unsigned int id, unsigned int butt
 
     if(!_is_dead) {
         _game->do_action(_keybinds->translate_joystick_button(id, button));
-        _ui->update(_game->get_held_type(), _game->get_scoreboard(), Constants::Run);
+        _ui->update(_game->get_held_type(), _game->get_3_next_types(),
+                    _game->get_scoreboard(), Game_states::Run);
     }
 }
 
@@ -139,22 +144,23 @@ void Player_instance::joystick_move_handler(unsigned int id, float x, float y){
             _joystick_ready = true;
         }
 
-        _ui->update(_game->get_held_type(), _game->get_scoreboard(), Constants::Run);
+        _ui->update(_game->get_held_type(), _game->get_3_next_types(),
+                    _game->get_scoreboard(), Game_states::Run);
     }
 }
 
-void Player_instance::set_end_state(Constants::End_states state) {
+void Player_instance::set_end_state(End_states state) {
     switch (state) {
-        case Constants::Winner:
+        case End_states::Winner:
             _ui->winner();
             break;
-        case Constants::Loser:
+        case End_states::Loser:
             _ui->loser();
             break;
-        case Constants::Tie:
+        case End_states::Tie:
             _ui->tie();
             break;
-        case Constants::Game_over:
+        case End_states::Game_over:
             break;
     }
 }
@@ -173,11 +179,13 @@ std::chrono::milliseconds Player_instance::gravity_tick() {
     _is_dead = _game->is_dead();
 
     if (_is_dead){
-        _ui->update(_game->get_held_type(), _game->get_scoreboard(), Constants::End);
+        _ui->update(_game->get_held_type(), _game->get_3_next_types(),
+                    _game->get_scoreboard(), Game_states::End);
 
     } else{
         _game->do_gametick_action();
-        _ui->update(_game->get_held_type(), _game->get_scoreboard(), Constants::Run);
+        _ui->update(_game->get_held_type(), _game->get_3_next_types(),
+                    _game->get_scoreboard(), Game_states::Run);
     }
 
     auto delay = std::chrono::milliseconds((long long)_game->get_gravity_delay_ms());

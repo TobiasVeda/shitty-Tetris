@@ -3,10 +3,10 @@
 //
 
 #include "Keybinds.h"
-#include "../model/pieces/Base_shape.h"
+#include "../Enumerations.h"
 #include <SFML/Graphics.hpp>
 
-void Keybinds::assign_default(int player) {
+void Keybinds::assign_default(unsigned int player) {
 
     if (player == 0){ //solo game
         _key_down = sf::Keyboard::Key::Down;
@@ -35,31 +35,31 @@ void Keybinds::assign_default(int player) {
     }
 }
 
-void Keybinds::assign_key(Constants::Actions action, sf::Keyboard::Key keycode) {
+void Keybinds::assign_key(Actions action, sf::Keyboard::Key keycode) {
 
     switch (action) {
-        case Constants::Move_down:
+        case Actions::Move_down:
             _key_down = keycode;
             break;
-        case Constants::Move_right:
+        case Actions::Move_right:
             _key_right = keycode;
             break;
-        case Constants::Move_left:
+        case Actions::Move_left:
             _key_left = keycode;
             break;
-        case Constants::Rotate_clockwise:
+        case Actions::Rotate_clockwise:
             _key_clockwise = keycode;
             break;
-        case Constants::Rotate_counter_clock:
+        case Actions::Rotate_counter_clock:
             _key_counter_clock = keycode;
             break;
-        case Constants::Drop:
+        case Actions::Drop:
             _key_drop = keycode;
             break;
-        case Constants::Hold:
+        case Actions::Hold:
             _key_hold = keycode;
             break;
-        case Constants::Nothing:
+        case Actions::Nothing:
             break;
     }
 }
@@ -70,65 +70,65 @@ void Keybinds::assign_joystick(unsigned int id) {
 }
 
 
-Constants::Actions Keybinds::translate_key(sf::Keyboard::Key &key) const{
+Actions Keybinds::translate_key(sf::Keyboard::Key &key) const{
     // Key codes not constant, so switchcase not possible
 
     if (_using_gamepad){
-        return Constants::Nothing;
+        return Actions::Nothing;
     }
 
    if (key == _key_down){
-       return Constants::Move_down;
+       return Actions::Move_down;
    } else if (key == _key_right){
-       return Constants::Move_right;
+       return Actions::Move_right;
    } else if (key == _key_left){
-       return Constants::Move_left;
+       return Actions::Move_left;
    } else if (key == _key_clockwise){
-       return Constants::Rotate_clockwise;
+       return Actions::Rotate_clockwise;
    } else if (key == _key_counter_clock){
-       return Constants::Rotate_counter_clock;
+       return Actions::Rotate_counter_clock;
    } else if (key == _key_drop){
-       return Constants::Drop;
+       return Actions::Drop;
    } else if (key == _key_hold){
-       return Constants::Hold;
+       return Actions::Hold;
    } else{
-       return Constants::Nothing;
+       return Actions::Nothing;
    }
 }
 
-Constants::Actions Keybinds::translate_joystick_button(unsigned int id, unsigned int button) const{
+Actions Keybinds::translate_joystick_button(unsigned int id, unsigned int button) const{
 
     if (!_using_gamepad){
-        return Constants::Nothing;
+        return Actions::Nothing;
     }
 
     if (id == _joystick_id && button == 2){
-        return Constants::Rotate_clockwise;
+        return Actions::Rotate_clockwise;
     } else if (id == _joystick_id && button == 3){
-        return Constants::Rotate_counter_clock;
+        return Actions::Rotate_counter_clock;
     } else if (id == _joystick_id && button == 0){
-        return Constants::Hold;
+        return Actions::Hold;
     } else if (id == _joystick_id && button == 1){
-        return Constants::Drop;
+        return Actions::Drop;
     } else{
-        return Constants::Nothing;
+        return Actions::Nothing;
     }
 }
 
-Constants::Actions Keybinds::translate_joystick_move(unsigned int id, float x, float y) const{
+Actions Keybinds::translate_joystick_move(unsigned int id, float x, float y) const{
 
     if (!_using_gamepad){
-        return Constants::Nothing;
+        return Actions::Nothing;
     }
 
     if (id == _joystick_id && y > 50){
-        return Constants::Move_down;
+        return Actions::Move_down;
     } else if (id == _joystick_id && x > 50){
-        return Constants::Move_right;
+        return Actions::Move_right;
     } else if (id == _joystick_id && x < -50){
-        return Constants::Move_left;
+        return Actions::Move_left;
     } else{
-        return Constants::Nothing;
+        return Actions::Nothing;
     }
 }
 

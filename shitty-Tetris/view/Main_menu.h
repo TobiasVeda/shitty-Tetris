@@ -24,14 +24,7 @@ private:
 
     sf::Text _cc;
 
-    // Needed for resize
-    float _pos_x_view;
-    float _pos_y_view;
-    float _basesize_view_x;
-    float _basesize_view_y;
-
     void construct_container();
-    void place_container();
     void construct_text();
 
     void draw(sf::RenderTarget&, sf::RenderStates) const override;

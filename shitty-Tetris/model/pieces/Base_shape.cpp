@@ -2,6 +2,8 @@
 // Created by tobia on 20.04.2024.
 //
 #include "Base_shape.h"
+#include "../../Enumerations.h"
+#include "../../Constants.h"
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <iostream>
@@ -11,7 +13,7 @@ Base_shape::Base_shape() {
     // a color, and the tilemap will be blank. Technically playable.
 
     _placed = false;
-    _type = Constants::Ndef;
+    _type = Block_types::Ndef;
     if(!_tileset.loadFromFile(Constants::texture_name)){
         std::cout <<"Unable to load tileset for block" <<std::endl;
     }
@@ -53,7 +55,7 @@ bool Base_shape::intersects(sf::RectangleShape &rectangle) const{
 bool Base_shape::is_placed() const{
     return _placed;
 }
-Constants::Block_types Base_shape::get_blocktype() const{
+Block_types Base_shape::get_blocktype() const{
     return _type;
 }
 std::list<sf::RectangleShape> Base_shape::get_rectangle_list() {

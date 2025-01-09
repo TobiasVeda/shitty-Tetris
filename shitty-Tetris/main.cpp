@@ -2,19 +2,11 @@
 #include <SFML/Graphics.hpp>
 
 
-//TODO: QUICK: Error handling when not finding texture(throw catch), Blockbag cant be static -1y
-//TODO: QUICK: Lisens, gule linjer (destructor),
-
-//TODO: MID(maybe): fix collision,
-//TODO: SLOW: resize:(
-//join, detach,
-//spør: gule linjer (destructor), mutex, UI magic numbers
-// tre mutex?, hvis ja fiks winner/loser i loop
-
 int main(){
 
     sf::RenderWindow window;
     window.create(sf::VideoMode(1920, 1080), "shitty Tetris");
+
 
     auto process = new Process(&window);
 
@@ -63,4 +55,5 @@ int main(){
             }
         }
     }
+    delete process;
 }

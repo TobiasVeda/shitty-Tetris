@@ -14,8 +14,8 @@ add_executable(shitty-Tetris main.cpp
         model/pieces/T_block.h
         model/pieces/O_block.cpp
         model/pieces/O_block.h
-        Block_bag.cpp
-        Block_bag.h
+        model/Block_generator.cpp
+        model/Block_generator.h
         model/pieces/L_block.cpp
         model/pieces/L_block.h
         model/Game.cpp
@@ -41,6 +41,7 @@ add_executable(shitty-Tetris main.cpp
         view/Audio.h
         controller/Process.cpp
         controller/Process.h
+        Enumerations.h
 )
 
 target_link_libraries(shitty-Tetris PRIVATE sfml-system sfml-network sfml-graphics sfml-window sfml-audio)

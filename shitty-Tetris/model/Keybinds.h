@@ -5,8 +5,7 @@
 #ifndef SHITTY_TETRIS_KEYBINDS_H
 #define SHITTY_TETRIS_KEYBINDS_H
 
-#include "../model/pieces/Base_shape.h"
-#include "../Constants.h"
+#include "../Enumerations.h"
 #include <SFML/Graphics.hpp>
 #include <list>
 
@@ -23,13 +22,13 @@ private:
     sf::Keyboard::Key _key_drop;
     sf::Keyboard::Key _key_hold;
 public:
-    void assign_default(int);
-    void assign_key(Constants::Actions, sf::Keyboard::Key);
+    void assign_default(unsigned int);
+    void assign_key(Actions, sf::Keyboard::Key);
     void assign_joystick(unsigned int);
 
-    [[nodiscard]] Constants::Actions translate_key(sf::Keyboard::Key&) const;
-    [[nodiscard]] Constants::Actions translate_joystick_button(unsigned int, unsigned int) const;
-    [[nodiscard]] Constants::Actions translate_joystick_move(unsigned int, float, float) const;
+    [[nodiscard]] Actions translate_key(sf::Keyboard::Key&) const;
+    [[nodiscard]] Actions translate_joystick_button(unsigned int, unsigned int) const;
+    [[nodiscard]] Actions translate_joystick_move(unsigned int, float, float) const;
 
     [[nodiscard]] bool joystick_centered(unsigned int, float, float) const;
 

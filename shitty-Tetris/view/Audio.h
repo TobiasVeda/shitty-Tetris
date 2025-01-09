@@ -15,8 +15,8 @@ private:
     static inline sf::SoundBuffer _placed_buffer;
 
     static inline sf::Music _theme;
-    static inline sf::Sound _lineclear;
     static inline sf::Sound _tetris;
+    static inline sf::Sound _lineclear;
     static inline sf::Sound _placed;
 
 public:
