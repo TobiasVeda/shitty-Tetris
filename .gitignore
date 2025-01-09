@@ -6,3 +6,4 @@ venv
 results.xml
 testing.py
 *.cmake-build-debug
+*.cmake-build-release
